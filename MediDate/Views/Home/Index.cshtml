@@ -15,6 +15,9 @@
     <div class="row" style="display: flex; justify-content: center;">
         <div class="col-9">
             <input type="text" class="form-control" id="floatingInputGroup1" placeholder="Especialidad, Servicio, Nombre">
+            <div id="lstBusqueda">
+                @Html.ListBox("Busqueda",null,htmlAttributes: new { @class = "form-control" } )
+            </div>
         </div>
         <div class="col-auto">
             <button type="button" class="btn btn-primary">Buscar</button>
@@ -55,3 +58,7 @@
 }
     </tbody>
 </table>
+
+<script>
+   document.getElementById("lstBusqueda").hidden = true;
+</script>

@@ -20,7 +20,7 @@ namespace MediDate.Controllers
 
         public IActionResult Index()
         {
-            
+            ViewBag.Busqueda = new SelectList(_database.Especialidades.GetAll(), "IdEspecialidad", "Descripcion");
             return View(_database.Medicos.GetAll());
         }
 
