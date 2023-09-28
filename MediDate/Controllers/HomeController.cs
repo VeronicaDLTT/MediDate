@@ -21,8 +21,40 @@ namespace MediDate.Controllers
         public IActionResult Index()
         {
             ViewBag.Busqueda = new SelectList(_database.Especialidades.GetAll(), "IdEspecialidad", "Descripcion");
+            ViewBag.Busqueda2 = new SelectList(_database.Medicos.GetAll(), "IdMedico", "NombreCompleto");
+
             return View(_database.Medicos.GetAll());
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Index(string txtBuscar)
+        {
+            ViewBag.Busqueda = new SelectList(_database.Especialidades.GetAll(), "IdEspecialidad", "Descripcion");
+           
+            if (String.IsNullOrEmpty(txtBuscar))
+            {
+
+                return View(_database.Medicos.GetAll());
+            }
+            else
+            {
+                var result = _database.Medicos.BusquedaSuccess(txtBuscar);
+
+                if (!result.Success)
+                {
+                    TempData["AlertMessage"] = result.Message;
+                    return View(_database.Medicos.GetAll());
+                }
+                else
+                {
+                    return View(_database.Medicos.Busqueda(txtBuscar));
+                }
+            }
+
+        }
+
+
 
         public IActionResult Privacy()
         {

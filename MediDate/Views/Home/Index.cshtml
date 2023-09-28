@@ -4,61 +4,75 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@if (TempData["AlertMessage"] != null)
+{
+    <!--Modal No existen medicos con los datos proporcionados-->
+    <script>
+        window.onload = function () {
+            Swal.fire('Aviso', '@TempData["AlertMessage"]', 'info');
+        }
+    </script>
+}
+
+
+
 
 <div><label></label></div>
 
-<div class="container" >
+<div class="container">
+
+
+
+<form asp-action="Index">
     <div class="row" style="display: flex; justify-content: center;">
         <div class="col-9">
-            <input type="text" class="form-control" id="floatingInputGroup1" placeholder="Especialidad, Servicio, Nombre">
+            <input id="txtBuscar" name="txtBuscar" onkeyup="validar()" type="text" class="form-control" placeholder="Especialidad, Servicio, Nombre">
             <div id="lstBusqueda">
-                @Html.ListBox("Busqueda",null,htmlAttributes: new { @class = "form-control" } )
+                <select asp-items="@ViewBag.Busqueda" class="form-control"></select>
+                <select asp-items="@ViewBag.Busqueda2" class="form-control"></select>
             </div>
         </div>
         <div class="col-auto">
-            <button type="button" class="btn btn-primary">Buscar</button>
+            <button type="submit" class="btn btn-primary">Buscar</button>
         </div>
     </div>
-</div>
+</form>
 
 <div><label></label></div>
 
 <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayName("Nombre Completo")
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Especialidad)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NumCedula)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.NombreCompleto)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Especialidad)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumCedula)
-            </td>
-        </tr>
+@foreach (var item in Model){
+        <div class="card mb-3" style="max-width: 540px;">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="~/img/img_medico.png" class="img-fluid rounded-start" alt="Médico">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.NombreCompleto)</h5>
+                        <p class="card-text">@Html.DisplayFor(modelItem => item.Especialidad)</p>
+                        <p class="card-text"><small class="text-body-secondary">@Html.DisplayFor(modelItem => item.NumCedula)</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
 }
-    </tbody>
 </table>
+</div>
 
 <script>
-   document.getElementById("lstBusqueda").hidden = true;
+    document.getElementById('lstBusqueda').hidden = true;
+
+    //function validar() {
+
+    //    var tamanio = document.getElementById('txtBuscar').value;
+
+    //    if (tamanio.length != 0) {
+    //        document.getElementById('lstBusqueda').hidden = false;
+    //    }else{
+    //        document.getElementById('lstBusqueda').hidden = true;
+    //    }
+    //}
+   
 </script>
+
