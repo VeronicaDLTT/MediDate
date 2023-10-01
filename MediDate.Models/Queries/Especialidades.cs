@@ -17,22 +17,39 @@ namespace MediDate.Models.Queries
         /// <returns>Lista de Especialidades</returns>
         public List<Especialidad> GetAll()
         {
-            var medicos = new List<Especialidad>();
+            var especialidades = new List<Especialidad>();
 
             using(var db = GetConnection())
             {
-                medicos = db.Query<Especialidad>("sp_especialidades 5,'',''").ToList();
+                especialidades = db.Query<Especialidad>("sp_especialidades 5,'',''").ToList();
             }
 
-            return medicos;
+            return especialidades;
         }
 
         public Especialidad GetById(int IdEspecialidad)
         {
             using (var db = GetConnection())
             {
-                return db.QueryFirstOrDefault<Especialidad>("sp_productos 4,@IdEspecialidad,''", new { IdEspecialidad });
+                return db.QueryFirstOrDefault<Especialidad>("sp_especialidades 4,@IdEspecialidad,''", new { IdEspecialidad });
             }
+        }
+
+        /// <summary>
+        /// Busca todas las especialidades que coincidan con el parametro Descripcion
+        /// </summary>
+        /// <param name="Descripcion"></param>
+        /// <returns>Lista de Especialidades</returns>
+        public List<Especialidad> GetDescripciones(string Descripcion)
+        {
+            var especialidades = new List<Especialidad>();
+
+            using (var db = GetConnection())
+            {
+                especialidades = db.Query<Especialidad>("sp_especialidades 6,'',@Descripcion", new {Descripcion}).ToList();
+            }
+
+            return especialidades;
         }
     }
 }

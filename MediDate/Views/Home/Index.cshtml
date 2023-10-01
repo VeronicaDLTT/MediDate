@@ -14,23 +14,27 @@
     </script>
 }
 
-
-
+<style>
+    #ddBusqueda {
+        position: absolute;
+        z-index: 9999;
+        background-color: white;
+        padding: 10px;
+        border: 1px solid #ccc;
+        width: 900px;
+        box-sizing: border-box;
+    }
+</style>
 
 <div><label></label></div>
 
 <div class="container">
 
-
-
 <form asp-action="Index">
     <div class="row" style="display: flex; justify-content: center;">
         <div class="col-9">
-            <input id="txtBuscar" name="txtBuscar" onkeyup="validar()" type="text" class="form-control" placeholder="Especialidad, Servicio, Nombre">
-            <div id="lstBusqueda">
-                <select asp-items="@ViewBag.Busqueda" class="form-control"></select>
-                <select asp-items="@ViewBag.Busqueda2" class="form-control"></select>
-            </div>
+           <input id="txtBuscar" name="txtBuscar" onkeyup="getDropdownData()" type="text" class="form-control" placeholder="Especialidad, Servicio, Nombre" autocomplete="off">
+           <ul id="ddBusqueda" style="display:none;" class="list-group-item"></ul>
         </div>
         <div class="col-auto">
             <button type="submit" class="btn btn-primary">Buscar</button>
@@ -61,18 +65,62 @@
 </div>
 
 <script>
-    document.getElementById('lstBusqueda').hidden = true;
+    @*document.getElementById('lstBusqueda').hidden = true;*@
 
-    //function validar() {
+    function validar() {
 
-    //    var tamanio = document.getElementById('txtBuscar').value;
+        var tamanio = document.getElementById('txtBuscar').value;
 
-    //    if (tamanio.length != 0) {
-    //        document.getElementById('lstBusqueda').hidden = false;
-    //    }else{
-    //        document.getElementById('lstBusqueda').hidden = true;
-    //    }
-    //}
+        if (tamanio.length != 0) {
+            
+        }else{
+            document.getElementById('lstBusqueda').hidden = true;
+        }
+    }
+
+    function mostrarLista(){
+        document.getElementById('lstBusqueda').hidden = false;
+    }
    
+    function getDropdownData(){
+        const txtBuscar = document.getElementById('txtBuscar').value;
+
+        $.ajax({
+            url: `/Home/GetDropdownData?txtBuscar=${txtBuscar}`,
+            type: 'GET',
+            success: function (data){
+                
+
+                const dropdown = document.getElementById('ddBusqueda');
+
+                dropdown.innerHTML = '';
+
+                if (data.length === 0) {
+                    dropdown.style.display = 'none';
+                } else {
+
+                    data.forEach(item => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = item;
+                        listItem.classList = 'list-group-item list-group-item-action';
+                        listItem.addEventListener('click', function () {
+                            listItem.classList = 'list-group-item active';
+                            handleItemSelected(item);
+                            dropdown.style.display = 'none';
+                        });
+                        dropdown.appendChild(listItem);
+                    });
+
+                    dropdown.style.display = 'block';
+                }
+            }
+        });
+    }
+    function handleItemSelected(item) {
+        document.getElementById('txtBuscar').value = item;
+    }
+
+   
+
 </script>
 

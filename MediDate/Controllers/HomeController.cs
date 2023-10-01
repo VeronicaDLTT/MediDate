@@ -2,7 +2,9 @@
 using MediDate.Models.Queries;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using NuGet.Packaging;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection.Emit;
 
 namespace MediDate.Controllers
@@ -54,7 +56,21 @@ namespace MediDate.Controllers
 
         }
 
+        [HttpGet]
+        public JsonResult GetDropdownData(string txtBuscar)
+        {
+            var especialidades = _database.Especialidades.GetDescripciones(txtBuscar);
+            var servicios = _database.Servicios.GetDescripciones(txtBuscar);
 
+            var especialidadStrings = especialidades.Select(e => e.Descripcion).ToList();
+            var servicioStrings = servicios.Select(s => s.Descripcion).ToList();
+
+            var dropdownData = new List<string>();
+            dropdownData.AddRange(especialidadStrings);
+            dropdownData.AddRange(servicioStrings);
+
+            return Json(dropdownData);
+        }
 
         public IActionResult Privacy()
         {

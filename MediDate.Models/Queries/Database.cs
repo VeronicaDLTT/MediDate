@@ -10,11 +10,13 @@ namespace MediDate.Models.Queries
     {
         public Medicos Medicos { get; set; }
         public Especialidades Especialidades {get; set; }
+        public Servicios Servicios { get; set; }
 
         public Database()
         {
             Medicos = new Medicos();
             Especialidades = new Especialidades();
+            Servicios = new Servicios();
         }
     }
 }
