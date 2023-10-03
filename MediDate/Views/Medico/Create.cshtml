@@ -1,0 +1,92 @@
+﻿@model MediDate.Models.Medico
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+@if (TempData["AlertMessage"] != null)
+{
+    <!--Modal Correo ingresado ya existe-->
+    <script>
+        window.onload = function () {
+            Swal.fire('Aviso', '@TempData["AlertMessage"]', 'info');
+        }
+    </script>
+}
+
+
+<div class="container">
+    <h1>Create</h1>
+
+    <h4>Medico</h4>
+    <hr />
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <form asp-action="Create">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label">Correo</label>
+                    <input name="Email" type="email" placeholder="email@ejemplo.com" class="form-control" required/>
+                    <label class="control-label">Contraseña</label>
+                    <input name="Pass" type="password" placeholder="Contraseña" class="form-control" required/>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="Nombre" class="control-label"></label>
+                    <input asp-for="Nombre" class="form-control" required/>
+                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="PrimerApellido" class="control-label"></label>
+                        <input asp-for="PrimerApellido" class="form-control" required/>
+                        <span asp-validation-for="PrimerApellido" class="text-danger"></span>
+                    </div>
+            </div>
+            <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="SegundoApellido" class="control-label"></label>
+                        <input asp-for="SegundoApellido" class="form-control"/>
+                        <span asp-validation-for="SegundoApellido" class="text-danger"></span>
+                    </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                    <div class="form-group">
+                        <label asp-for="Especialidad" class="control-label"></label>
+                        <select asp-for="IdEspecialidad" asp-items="@ViewBag.IdEspecialidad" class="form-control"> </select>
+                        <span asp-validation-for="Especialidad" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="NumCedula" class="control-label">No. de Cédula</label>
+                        <input asp-for="NumCedula" class="form-control" required />
+                        <span asp-validation-for="NumCedula" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Telefono" class="control-label">Número de Celular</label>
+                        <input asp-for="Telefono" class="form-control" type="text" />
+                        <span asp-validation-for="Telefono" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Continuar" class="btn btn-primary" />
+                    </div>
+            
+            </div>
+        </div>
+    </form>
+
+    <div>
+        <a asp-controller="Home" asp-action="Index" class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Regresar</a>
+    </div>
+
+</div>
+

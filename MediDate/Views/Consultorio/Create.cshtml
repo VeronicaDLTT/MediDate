@@ -1,0 +1,60 @@
+﻿@model MediDate.Models.Consultorio
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="container">
+
+    <h1>Create</h1>
+
+    <h4>Información del Consultorio</h4>
+
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Descripcion" class="control-label">Nombre del Consultorio</label>
+                    <input asp-for="Descripcion" class="form-control" />
+                    <span asp-validation-for="Descripcion" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Calle" class="control-label"></label>
+                    <input asp-for="Calle" class="form-control" />
+                    <span asp-validation-for="Calle" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Colonia" class="control-label"></label>
+                    <input asp-for="Colonia" class="form-control" />
+                    <span asp-validation-for="Colonia" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="NumExterior" class="control-label"></label>
+                    <input asp-for="NumExterior" class="form-control" />
+                    <span asp-validation-for="NumExterior" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CodigoPostal" class="control-label"></label>
+                    <input asp-for="CodigoPostal" class="form-control" />
+                    <span asp-validation-for="CodigoPostal" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a onclick="regresar()" class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Regresar</a>
+    </div>
+
+</div>
+
+<script>
+    function regresar() {
+        window.history.back();
+    }
+</script>

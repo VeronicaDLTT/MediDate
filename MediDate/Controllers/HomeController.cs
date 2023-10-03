@@ -22,9 +22,6 @@ namespace MediDate.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.Busqueda = new SelectList(_database.Especialidades.GetAll(), "IdEspecialidad", "Descripcion");
-            ViewBag.Busqueda2 = new SelectList(_database.Medicos.GetAll(), "IdMedico", "NombreCompleto");
-
             return View(_database.Medicos.GetAll());
         }
 
@@ -32,8 +29,7 @@ namespace MediDate.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Index(string txtBuscar)
         {
-            ViewBag.Busqueda = new SelectList(_database.Especialidades.GetAll(), "IdEspecialidad", "Descripcion");
-           
+            
             if (String.IsNullOrEmpty(txtBuscar))
             {
 
@@ -56,6 +52,11 @@ namespace MediDate.Controllers
 
         }
 
+        /// <summary>
+        /// Enlista las Especialidades y Servicios para la lista desplegable del buscador
+        /// </summary>
+        /// <param name="txtBuscar"></param>
+        /// <returns>Lista de Especialidades y Servicios</returns>
         [HttpGet]
         public JsonResult GetDropdownData(string txtBuscar)
         {
