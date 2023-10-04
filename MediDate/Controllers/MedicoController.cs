@@ -47,13 +47,26 @@ namespace MediDate.Controllers
                 if (!result.Success)
                 {
                     //Guardamos los datos del Medico temporalmente
-                    
+                    TempData["Email"] = Email;
+                    TempData["Pass"] = Pass;
+
                     TempData["Nombre"] = medico.Nombre;
                     TempData["PrimerApellido"] = medico.PrimerApellido;
                     TempData["SegundoApellido"] = medico.SegundoApellido;
                     TempData["IdEspecialidad"] = medico.IdEspecialidad;
                     TempData["NumCedula"] = medico.NumCedula;
-                    TempData["Telefono"] = medico.Telefono;
+
+                    //Verifica si el campo Telefono es null para que no envie datos nulos
+                    if (medico.Telefono.Equals(null))
+                    {
+                        TempData["Telefono"] = 0;
+                    }
+                    else
+                    {
+                        TempData["Telefono"] = medico.Telefono;
+                    }
+
+                    
 
                     //Mostramos la vista para agregar la información del Consultorio
                     return RedirectToAction("Create", "Consultorio");

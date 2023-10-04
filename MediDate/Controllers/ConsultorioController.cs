@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using NuGet.Packaging;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Reflection.Emit;
 
@@ -14,7 +15,10 @@ namespace MediDate.Controllers
     {
         private readonly Database _database;
         private readonly ILogger<ConsultorioController> _logger;
-
+        //Variables para almacenar los datos de MedicoController
+        public Medico medico1 = new Medico();
+        public string Email1;
+        public string Pass1;
         public ConsultorioController(ILogger<ConsultorioController> logger)
         {
             _logger = logger;
@@ -38,27 +42,24 @@ namespace MediDate.Controllers
 
             try
             {
-
                 //Obtenemos los datos temporales de MedicoController
-                Medico medico = new Medico();
+                Email1 = TempData["Email"] as string;
+                Pass1 = TempData["Pass"] as string;
 
-                string Email = TempData["Email"] as string;
-                string Pass = TempData["Pass"] as string;
-
-                medico.Nombre = TempData["Nombre"] as string;
-                medico.PrimerApellido = TempData["PrimerApellido"] as string;
-                medico.SegundoApellido = TempData["SegundoApellido"] as string;
-                medico.IdEspecialidad = (int)TempData["IdEspecialidad"];
-                medico.NumCedula = TempData["NumCedula"] as string;
-                medico.Telefono = (int)TempData["Telefono"];
+                medico1.Nombre = TempData["Nombre"] as string;
+                medico1.PrimerApellido = TempData["PrimerApellido"] as string;
+                medico1.SegundoApellido = TempData["SegundoApellido"] as string;
+                medico1.IdEspecialidad = (int)TempData["IdEspecialidad"];
+                medico1.NumCedula = TempData["NumCedula"] as string;
+                medico1.Telefono = (int)TempData["Telefono"];
 
 
                 //Creamos el Usuario Medico
-                var result = _database.Usuarios.CreateMedicos(Email, Pass, medico, consultorio);
+                var result = _database.Usuarios.CreateMedicos(Email1, Pass1, medico1, consultorio);
 
                 if (!result.Success)
                 {
-                    TempData["AlertMessage"] = "No fue posible guardar la información del Consultorio";
+                    TempData["AlertMessage"] = "No fue posible guardar la información del Usuario.";
                     return View(consultorio);
                 }
                 else
@@ -79,7 +80,7 @@ namespace MediDate.Controllers
             catch (Exception e)
             {
                 //Console.WriteLine("Excepción: " + e.Message);
-                TempData["ErrorMessage"] = "No fue posible guardar la información del Consultorio" + e.Message;
+                TempData["ErrorMessage"] = "No fue posible guardar la información del Usuario. " + e.Message;
                 return RedirectToAction("Index", "Home");
             }
             
