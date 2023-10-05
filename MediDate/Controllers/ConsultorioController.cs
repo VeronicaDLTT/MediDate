@@ -51,7 +51,7 @@ namespace MediDate.Controllers
                 medico1.SegundoApellido = TempData["SegundoApellido"] as string;
                 medico1.IdEspecialidad = (int)TempData["IdEspecialidad"];
                 medico1.NumCedula = TempData["NumCedula"] as string;
-                medico1.Telefono = (int)TempData["Telefono"];
+                medico1.Telefono = TempData["Telefono"] as string;
 
 
                 //Creamos el Usuario Medico

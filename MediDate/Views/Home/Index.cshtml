@@ -34,6 +34,18 @@
     </script>
 }
 
+<style>
+    #ddBusqueda {
+        position: absolute;
+        z-index: 9999;
+        background-color: white;
+        padding: 10px;
+        border: 1px solid #ccc;
+        width: 900px;
+        box-sizing: border-box;
+    }
+</style>
+
 <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
     <div class="container">
         <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MediDate</a>
@@ -57,7 +69,7 @@
                             Registrarse
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Como Paciente</a></li>
+                            <li><a class="dropdown-item" asp-area="" asp-controller="Paciente" asp-action="Create">Como Paciente</a></li>
                             <li><a class="dropdown-item" asp-area="" asp-controller="Medico" asp-action="Create">Como Especialista</a></li>
                         </ul>
                     </div>
@@ -66,18 +78,6 @@
         </div>
     </div>
 </nav>
-
-<style>
-    #ddBusqueda {
-        position: absolute;
-        z-index: 9999;
-        background-color: white;
-        padding: 10px;
-        border: 1px solid #ccc;
-        width: 900px;
-        box-sizing: border-box;
-    }
-</style>
 
 <img src="~/img/fondo_fondo.png" width="1519px" />
 

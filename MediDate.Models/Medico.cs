@@ -14,7 +14,7 @@ namespace MediDate.Models
         public int IdEspecialidad { get; set; }
         public string Especialidad { get; set; }
         public string NumCedula { get; set; }
-        public int? Telefono { get; set; }
+        public string? Telefono { get; set; }
 
     }
 }

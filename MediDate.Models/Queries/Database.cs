@@ -9,6 +9,7 @@ namespace MediDate.Models.Queries
     public class Database
     {
         public Usuarios Usuarios { get; set; }
+        public Pacientes Pacientes { get; set; }
         public Medicos Medicos { get; set; }
         public Especialidades Especialidades {get; set; }
         public Servicios Servicios { get; set; }
@@ -17,6 +18,7 @@ namespace MediDate.Models.Queries
         public Database()
         {
             Usuarios = new Usuarios();
+            Pacientes = new Pacientes();
             Medicos = new Medicos();
             Especialidades = new Especialidades();
             Servicios = new Servicios();

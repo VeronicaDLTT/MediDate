@@ -12,11 +12,29 @@ namespace MediDate.Models.Queries
         public Usuarios() : base(){}
 
         /// <summary>
-        /// Crear nuevo Usuario en la tabla Usuarios
+        /// Crear nuevo Usuario Medico en la tabla Usuarios
         /// </summary>
         /// <param name="Email"></param>
         /// <param name="Password"></param>
-        /// <param name="TipoUsuario"></param>
+        /// <param name="paciente"></param>
+        /// <returns>Mensaje si se creo o no el Usuario</returns>
+        public BaseResult CreatePacientes(string Email, string Password, Paciente paciente)
+        {
+
+            using (var db = GetConnection())
+            {
+                return db.QueryFirstOrDefault<BaseResult>(
+                    "sp_usuarios 1,'',@Email,@Password,'P',@FechaNacimiento,'',@Nombre,@Apellido,'','',@Telefono",
+                    new{Email,Password,paciente.FechaNacimiento,paciente.Nombre,paciente.Apellido,paciente.Telefono});
+            }
+        }
+
+        /// <summary>
+        /// Crear nuevo Usuario Medico en la tabla Usuarios
+        /// </summary>
+        /// <param name="Email"></param>
+        /// <param name="Password"></param>
+        /// <param name="consultorio"></param>
         /// <returns>Mensaje si se creo o no el Usuario</returns>
         public BaseResult CreateMedicos(string Email, string Password,Medico medico, Consultorio consultorio)
         {

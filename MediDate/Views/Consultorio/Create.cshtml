@@ -6,7 +6,7 @@
 
 <div class="container">
 
-    <h1>Create</h1>
+    <div><label></label></div>
 
     <h4>Información del Consultorio</h4>
 
@@ -19,36 +19,41 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="Descripcion" class="control-label">Nombre del Consultorio</label>
-                    <input asp-for="Descripcion" class="form-control" />
+                    <input asp-for="Descripcion" class="form-control" placeholder="Nombre del Consultorio" />
                     <span asp-validation-for="Descripcion" class="text-danger"></span>
                 </div>
+                <div><label></label></div>
                 <div class="form-group">
                     <label asp-for="Calle" class="control-label"></label>
-                    <input asp-for="Calle" class="form-control" />
+                    <input asp-for="Calle" class="form-control" placeholder="Calle" />
                     <span asp-validation-for="Calle" class="text-danger"></span>
                 </div>
+                <div><label></label></div>
                 <div class="form-group">
                     <label asp-for="Colonia" class="control-label"></label>
-                    <input asp-for="Colonia" class="form-control" />
+                    <input asp-for="Colonia" class="form-control" placeholder="Colonia"/>
                     <span asp-validation-for="Colonia" class="text-danger"></span>
                 </div>
+                <div><label></label></div>
                 <div class="form-group">
-                    <label asp-for="NumExterior" class="control-label"></label>
-                    <input asp-for="NumExterior" class="form-control" />
+                    <label asp-for="NumExterior" class="control-label">No. Exterior</label>
+                    <input asp-for="NumExterior" class="form-control" placeholder="1234"/>
                     <span asp-validation-for="NumExterior" class="text-danger"></span>
                 </div>
+                <div><label></label></div>
                 <div class="form-group">
-                    <label asp-for="CodigoPostal" class="control-label"></label>
-                    <input asp-for="CodigoPostal" class="form-control" />
+                    <label asp-for="CodigoPostal" class="control-label">Código Postal</label>
+                    <input asp-for="CodigoPostal" class="form-control" placeholder="12345" pattern="[0-9]{5}" />
                     <span asp-validation-for="CodigoPostal" class="text-danger"></span>
                 </div>
+                <div><label></label></div>
                 <div class="form-group">
                     <input type="submit" value="Guardar" class="btn btn-primary" />
                 </div>
             </form>
         </div>
     </div>
-
+    <div><label></label></div>
     <div>
         <a onclick="regresar()" class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Regresar</a>
     </div>
