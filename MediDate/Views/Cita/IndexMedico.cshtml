@@ -1,0 +1,82 @@
+﻿@model IEnumerable<MediDate.Models.Cita>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<partial name="_MenuMedicos" />
+
+        <h1>Mis Citas</h1>
+
+        @*<p class="d-flex justify-content-end">*@
+        <p>
+            <a class="btn btn-primary" asp-controller="Cita" asp-action="IndexMedico">Agendar</a>
+        </p>
+
+        <div class="table-responsive">
+            @if(Model.Count()>0){
+                <table class="table">
+                    <thead>
+                        <tr>
+
+                            <th>
+                                @Html.DisplayNameFor(model => model.Fecha)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Hora)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.NombrePaciente)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Servicio)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DescEstado)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Fecha)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Hora)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.NombrePaciente)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Servicio)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DescEstado)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }else{
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Sin Citas</h5>
+                        <p class="card-text">No hay citas programadas por el momento.</p>
+                    </div>
+                </div>
+            }
+        </div>
+
+        </div> @*Fin Col de _MenuMedicos.cshtml*@
+    </div> @* Fin Row de _MenuMedicos.cshtml*@
+</div> @*Fin Container de _MenuMedicos.cshtml*@
+
+

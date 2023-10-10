@@ -22,6 +22,7 @@ namespace MediDate.Controllers
 
         public IActionResult Index()
         {
+            
             return View(_database.Medicos.GetAll());
         }
 

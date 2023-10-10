@@ -23,7 +23,12 @@ namespace MediDate.Controllers
 
         public IActionResult Index()
         {
-           return View();
+            if (Request.Cookies.TryGetValue("Email", out string Email))
+            {
+                ViewData["Email"] = Email;
+            }
+            
+            return View();
         }
 
         public IActionResult Create()

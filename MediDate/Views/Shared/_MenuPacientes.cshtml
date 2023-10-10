@@ -1,0 +1,75 @@
+﻿<div class="offcanvas offcanvas-start bg-dark" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">
+
+    <div class="offcanvas-body">
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li>
+                <a class="nav-link text-white" href="#"><i class="fa-solid fa-bars fa-2xl me-3" style="color: #e5e7eb;"></i>Menú</a>
+            </li>
+
+            <hr style="background: #e5e7eb " />
+
+            <li>
+                <a class="nav-link text-white" asp-area="" asp-controller="Cita" asp-action="IndexPaciente"><i class="fa-solid fa-calendar fa-2xl me-3" style="color: #e5e7eb;"></i>Mis Citas</a>
+            </li>
+
+            <hr />
+
+            <li>
+                <a class="nav-link text-white" asp-area="" asp-controller="Paciente" asp-action="Index"><i class="fa-solid fa-gear fa-2xl me-3" style="color: #e5e7eb;"></i>Configuración de la cuenta</a>
+            </li>
+
+            <hr style="background: #e5e7eb " />
+
+            <li>
+                <a class="nav-link text-white" asp-area="" asp-controller="Usuario" asp-action="LogOut"><i class="fa-solid fa-right-from-bracket fa-2xl me-3" style="color: #e5e7eb;"></i>Cerrar sesión</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="container-fluid"> @*Inicio Container de _MenuMedicos.cshtml*@
+
+    <div class="row"> @*Inicio Row de _MenuMedicos.cshtml*@
+        <div class="col-md-auto p-0">
+            <div class="d-flex flex-column flex-shrink-0 p-3 bg-dark" style="width:100px; height:100%;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu" aria-controls="offcanvasWithBackdrop">
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li>
+                        <a class="nav-link" href="#"><i class="fa-solid fa-bars fa-2xl" style="color: #e5e7eb;"></i></a>
+                    </li>
+
+                    <hr style="background: #e5e7eb " />
+
+                    <li>
+                        <a class="nav-link" href="#"><i class="fa-solid fa-calendar fa-2xl" style="color: #e5e7eb;"></i></a>
+                    </li>
+
+                    <hr />
+
+                    <li>
+                        <a class="nav-link" href="#"><i class="fa-solid fa-gear fa-2xl" style="color: #e5e7eb;"></i></a>
+                    </li>
+
+                    <hr style="background: #e5e7eb " />
+
+                    <li>
+                        <a class="nav-link" href="#"><i class="fa-solid fa-right-from-bracket fa-2xl" style="color: #e5e7eb;"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col"> @*Inicio Col de _MenuMedicos.cshtml*@
+            
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                <div class="container">
+                    <div class="row justify-content-center" style="width:100%;">
+                        <div class="col-md-auto">
+                            <h3 class="nav-link"><a asp-area="" asp-controller="Home" asp-action="Index"></a>MediDate</h3>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+    
+
+

@@ -14,6 +14,8 @@ namespace MediDate.Models.Queries
         public Especialidades Especialidades {get; set; }
         public Servicios Servicios { get; set; }
         public Consultorios Consultorios { get; set; }
+        public Citas Citas { get; set; }
+        public Horarios Horarios { get; set; }
 
         public Database()
         {
@@ -23,6 +25,8 @@ namespace MediDate.Models.Queries
             Especialidades = new Especialidades();
             Servicios = new Servicios();
             Consultorios = new Consultorios();
+            Citas = new Citas();
+            Horarios = new Horarios();
         }
     }
 }

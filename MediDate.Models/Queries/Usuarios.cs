@@ -11,6 +11,12 @@ namespace MediDate.Models.Queries
     {
         public Usuarios() : base(){}
 
+        public int? IdUsuario;
+        public char? TipoUsuario;
+        public int? IdMedico;
+        public int? IdPaciente;
+        public string? Email;
+
         /// <summary>
         /// Crear nuevo Usuario Medico en la tabla Usuarios
         /// </summary>
@@ -74,6 +80,33 @@ namespace MediDate.Models.Queries
             using (var db = GetConnection())
             {
                 return db.QueryFirstOrDefault<Usuario>("sp_usuarios 6");
+            }
+        }
+
+        /// <summary>
+        /// Valida al usuario para saber si tiene acceso al sistema
+        /// </summary>
+        /// <param name="usuario"></param>
+        /// <returns>Regresa 0 si no tiene acceso y 1 si tiene acceso</returns>
+        public BaseResult Login(Usuario usuario)
+        {
+
+            using (var db = GetConnection())
+            {
+                return db.QueryFirstOrDefault<BaseResult>("sp_usuarios 7,'',@Email,@Password", new { usuario.Email, usuario.Password });
+            }
+        }
+
+        /// <summary>
+        /// Obtiene los datos del Usuario que ingresa
+        /// </summary>
+        /// <param name="usuario"></param>
+        /// <returns>Datos IdUsuario, TipoUsuario, IdMedico o IdPaciente</returns>
+        public BaseUsuario DatosUsuario(Usuario usuario)
+        {
+            using (var db = GetConnection())
+            {
+                return db.QueryFirstOrDefault<BaseUsuario>("sp_usuarios 8,'',@Email,@Password", new { usuario.Email, usuario.Password });
             }
         }
     }

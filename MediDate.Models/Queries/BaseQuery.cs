@@ -49,5 +49,14 @@ namespace MediDate.Models.Queries
             /// </summary>
             public int ObjectID { get; set; }
         }
+
+        public class BaseUsuario
+        {
+            public int IdUsuario;
+            public char TipoUsuario;
+            public string Email;
+            public int? IdMedico;
+            public int? IdPaciente;
+        }
     }
 }

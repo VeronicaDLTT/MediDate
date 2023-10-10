@@ -61,7 +61,7 @@
             </ul>
             <ul class="navbar-nav flex-grow-2">
                 <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Iniciar Sesión</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Login">Iniciar Sesión</a>
                 </li>
                 <li class="nav-item">
                     <div class="btn-group">
@@ -120,23 +120,8 @@
 </div>
 
 <script>
-    @*document.getElementById('lstBusqueda').hidden = true;*@
-
-    function validar() {
-
-        var tamanio = document.getElementById('txtBuscar').value;
-
-        if (tamanio.length != 0) {
-            
-        }else{
-            document.getElementById('lstBusqueda').hidden = true;
-        }
-    }
-
-    function mostrarLista(){
-        document.getElementById('lstBusqueda').hidden = false;
-    }
    
+    @*Mostrar lista desplegable para el buscador*@
     function getDropdownData(){
         const txtBuscar = document.getElementById('txtBuscar').value;
 
@@ -171,11 +156,13 @@
             }
         });
     }
+
+    @*Pone la opcion seleccionada de la lista desplegable en el input del buscador*@
     function handleItemSelected(item) {
         document.getElementById('txtBuscar').value = item;
     }
 
-   
+    
 
 </script>
 
