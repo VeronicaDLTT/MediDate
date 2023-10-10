@@ -13,10 +13,10 @@ namespace MediDate.Models.Queries
         public Medicos Medicos { get; set; }
         public Especialidades Especialidades {get; set; }
         public Servicios Servicios { get; set; }
+        public DetServicios DetServicios { get; set; }
         public Consultorios Consultorios { get; set; }
         public Citas Citas { get; set; }
         public Horarios Horarios { get; set; }
-
         public Database()
         {
             Usuarios = new Usuarios();
@@ -24,6 +24,7 @@ namespace MediDate.Models.Queries
             Medicos = new Medicos();
             Especialidades = new Especialidades();
             Servicios = new Servicios();
+            DetServicios = new DetServicios();
             Consultorios = new Consultorios();
             Citas = new Citas();
             Horarios = new Horarios();

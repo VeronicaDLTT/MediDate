@@ -105,57 +105,5 @@ namespace MediDate.Controllers
         {
             return View();
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Restablecer(string Email)
-        {
-              
-            MailMessage email = new MailMessage();
-            SmtpClient smtp = new SmtpClient();
-            var emailDestino = Email;
-            var emailOrigen = "a348759@gmail.com";
-            var passOrigen = "jump4n5q8";
-
-            email.To.Add(new MailAddress(emailDestino));
-            email.From = new MailAddress(emailOrigen);
-            email.Subject = "Restablecer contraseña";
-            email.SubjectEncoding = System.Text.Encoding.UTF8;
-            email.Body = "Click <a href=\"http://localhost:7141/Usuario/Actualizar\">here</a> to access the update password.";
-            email.IsBodyHtml = true;
-            email.Priority = MailPriority.Normal;
-
-            smtp.Host = "smtp.gmail.com";
-            smtp.Port = 587; // Puerto SMTP de Gmail
-            //smtp.Timeout = 60000; // Tiempo de espera en milisegundos (60 segundos)
-            smtp.EnableSsl = true; // Habilita SSL para Gmail
-            smtp.EnableSsl = false;
-            smtp.UseDefaultCredentials = false;
-            smtp.Credentials = new NetworkCredential(emailOrigen, passOrigen);
-
-
-            try
-            {
-                smtp.Send(email);
-                email.Dispose();
-                TempData["SuccessMessage"] = "Correo electrónico fue enviado satisfactoriamente.";
-
-                return RedirectToAction("Login", "Usuario");
-            }
-            catch (SmtpException exm)
-            {
-                TempData["ErrorMessage"] = "Error al enviar el correo. STMP. No. Error: " + exm.StatusCode + " Message: " + exm.Message;
-                return RedirectToAction("Index", "Home");
-            }
-            catch (Exception e)
-            {
-                
-                TempData["ErrorMessage"] = "Error al enviar el correo. " + e.Message;
-                return RedirectToAction("Index", "Home");
-            }
-
-            
-            
-        }
     }
 }
