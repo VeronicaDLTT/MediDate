@@ -1,4 +1,4 @@
-﻿@model MediDate.Models.Paciente
+﻿@model MediDate.Models.Medico
 
 @{
     ViewData["Title"] = "Details";
@@ -24,45 +24,45 @@
     </script>
 }
 
-<partial name="_MenuPacientes"/>
+<partial name="_MenuMedicos" />
 
 <h1>Configuración de la cuenta</h1>
 
 <div><label></label></div>
 
-<div class="card" style="width: 35rem;">
+<div class="card" style="width: 30rem;">
     <div class="card-body">
         <div>
-            <dl class="row">
-                <dt class="col-sm-6">
-                    @Html.DisplayName("Correo")
-                </dt>
-                <dd class = "col-sm-6">
-                    <label>@ViewBag.Email</label>
-                </dd>
+            <dl class="row">                       
                 <dt class = "col-sm-6">
                     @Html.DisplayNameFor(model => model.Nombre)
                 </dt>
                 <dd class = "col-sm-6">
                     @Html.DisplayFor(model => model.Nombre)
                 </dd>
-                <dt class="col-sm-6">
-                    @Html.DisplayNameFor(model => model.Apellido)
-                </dt>
-                <dd class="col-sm-6">
-                    @Html.DisplayFor(model => model.Apellido)
-                </dd>
                 <dt class = "col-sm-6">
-                    @Html.DisplayName("Fecha de Nacimiento")
+                    @Html.DisplayNameFor(model => model.PrimerApellido)
                 </dt>
                 <dd class = "col-sm-6">
-                    @{
-                        string fechaFormateada = Model.FechaNacimiento.HasValue
-                        ? Model.FechaNacimiento.Value.ToString("dd/MM/yyyy")
-                        : string.Empty;
-                    }
-
-                    @Html.DisplayFor(model => fechaFormateada)
+                    @Html.DisplayFor(model => model.PrimerApellido)
+                </dd>
+                <dt class = "col-sm-6">
+                    @Html.DisplayNameFor(model => model.SegundoApellido)
+                </dt>
+                <dd class = "col-sm-6">
+                    @Html.DisplayFor(model => model.SegundoApellido)
+                </dd>
+                <dt class = "col-sm-6">
+                    @Html.DisplayNameFor(model => model.Especialidad)
+                </dt>
+                <dd class = "col-sm-6">
+                    @Html.DisplayFor(model => model.Especialidad)
+                </dd>
+                <dt class = "col-sm-6">
+                    @Html.DisplayName("No de Cédula")
+                </dt>
+                <dd class = "col-sm-6">
+                    @Html.DisplayFor(model => model.NumCedula)
                 </dd>
                 <dt class = "col-sm-6">
                     @Html.DisplayName("Número de Celular")
@@ -75,10 +75,10 @@
         <div>
             <div class="row d-flex justify-content-end">
                 <div class="col-md-auto">
-                    <a class="link-dark" asp-controller="Cita" asp-action="IndexPaciente">Regresar</a>
+                    <a class="link-dark" asp-controller="Cita" asp-action="IndexMedico">Regresar</a>
                 </div>
                 <div class="col-md-auto">
-                    <a class="btn btn-primary" asp-controller="Paciente" asp-action="Edit">Editar</a>
+                    <a class="btn btn-primary" asp-controller="Medico" asp-action="Edit">Editar</a>
                 </div>
             </div>
         </div>

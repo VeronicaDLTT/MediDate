@@ -40,5 +40,16 @@ namespace MediDate.Models.Queries
             }
         }
 
+        public BaseResult Edit(Paciente paciente)
+        {
+
+            using (var db = GetConnection())
+            {
+                return db.QueryFirstOrDefault<BaseResult>(
+                    "sp_pacientes 3,@IdPaciente,'',@Nombre,@Apellido,@FechaNacimiento,@Telefono",
+                    new { paciente.IdPaciente, paciente.Nombre, paciente.Apellido, paciente.FechaNacimiento, paciente.Telefono });
+            }
+        }
+
     }
 }

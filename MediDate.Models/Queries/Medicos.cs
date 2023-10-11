@@ -55,6 +55,16 @@ namespace MediDate.Models.Queries
             }
         }
 
+        public BaseResult Edit(Medico medico)
+        {
+
+            using (var db = GetConnection())
+            {
+                return db.QueryFirstOrDefault<BaseResult>("sp_medicos 3,@IdMedico,'',@IdEspecialidad,@Nombre,@PrimerApellido,@SegundoApellido,@NumCedula,@Telefono",
+                                                            new { medico.IdMedico, medico.IdEspecialidad, medico.Nombre, medico.PrimerApellido, medico.SegundoApellido, medico.NumCedula, medico.Telefono });
+            }
+        }
+
         /// <summary>
         /// Busca los medicos por nombre, especialidad y servicio que ofrecen
         /// </summary>
@@ -97,5 +107,6 @@ namespace MediDate.Models.Queries
                 return db.QueryFirstOrDefault<Medico>("sp_medicos 6");
             }
         }
+
     }
 }

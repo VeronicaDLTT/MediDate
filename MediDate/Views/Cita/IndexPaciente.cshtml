@@ -4,6 +4,16 @@
     ViewData["Title"] = "Index";
 }
 
+@if (TempData["ErrorMessage"] != null)
+{
+    <!--Modal si ocurre una excepción-->
+    <script>
+        window.onload = function () {
+            Swal.fire('Aviso', '@TempData["ErrorMessage"]', 'error');
+        }
+    </script>
+}
+
 <partial name="_MenuPacientes" />
 
         <h1>Mis Citas</h1>

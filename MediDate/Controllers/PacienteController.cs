@@ -23,11 +23,6 @@ namespace MediDate.Controllers
 
         public IActionResult Index()
         {
-            if (Request.Cookies.TryGetValue("Email", out string Email))
-            {
-                ViewData["Email"] = Email;
-            }
-            
             return View();
         }
 
@@ -79,7 +74,104 @@ namespace MediDate.Controllers
                 TempData["ErrorMessage"] = "No fue posible crear el Usuario. " + e.Message;
                 return RedirectToAction("Index", "Home");
             }
+
+        }
+
+        public IActionResult Details()
+        {
+            //Guardamos el dato de Email
+            if (Request.Cookies.TryGetValue("Email", out string strEmail))
+            {
+                ViewBag.Email = strEmail;
+            }
+
+            //Buscamos la información por el IdPaciente
+            if (Request.Cookies.TryGetValue("IdPaciente", out string strPaciente))
+            {
+                int IdPaciente = Int32.Parse(strPaciente);
+
+                var paciente = _database.Pacientes.GetById(IdPaciente);
+
+                if (paciente == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return View(paciente);
+                }
+
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Error al cargar Configuración de la Cuenta";
+                return RedirectToAction("Index", "Paciente");
+            }
+        }
+
+        public IActionResult Edit()
+        {
             
+            //Buscamos la información por el IdPaciente
+            if (Request.Cookies.TryGetValue("IdPaciente", out string strPaciente))
+            {
+                int IdPaciente = Int32.Parse(strPaciente);
+
+                var paciente = _database.Pacientes.GetById(IdPaciente);
+
+                
+
+                if (paciente == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return View(paciente);
+                }
+
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Error al cargar Editar Cuenta";
+                return RedirectToAction("Details", "Paciente");
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Paciente paciente)
+        {
+            try
+            {
+                //Guardamos el IdPaciente
+                if (Request.Cookies.TryGetValue("IdPaciente", out string strPaciente))
+                {
+                    paciente.IdPaciente = Int32.Parse(strPaciente);
+
+                    var result = _database.Pacientes.Edit(paciente);
+
+                    if (!result.Success)
+                    {
+                        TempData["AlertMessage"] = "La información no se pudo actualizar.";
+                        return View(paciente);
+                    }
+
+                    TempData["SuccessMessage"] = result.Message;
+                    return RedirectToAction("Details", "Paciente");
+
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Error al actualizar Editar Cuenta";
+                    return RedirectToAction("Index", "Paciente");
+                }
+            }
+            catch (Exception e)
+            {
+                TempData["ErrorMessage"] = "Error al actualizar la información. " + e.Message;
+                return RedirectToAction("IndexPaciente", "Cita");
+            }
         }
     }
 }

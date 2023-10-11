@@ -1,17 +1,13 @@
 ﻿using MediDate.Models;
 using MediDate.Models.Queries;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using NuGet.Packaging;
-using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Linq;
-using System.Net.Mail;
-using System.Net.Mime;
-using System.Net;
-using System.Reflection.Emit;
-using System.Web.Helpers;
+using MediDate.Services;
+using System.Drawing;
+using System.Security.Cryptography;
+using System.Text;
+using System.Runtime.Intrinsics.Arm;
+using Aes = System.Security.Cryptography.Aes;
+using System.Runtime.Intrinsics.X86;
 
 namespace MediDate.Controllers
 {
@@ -19,11 +15,15 @@ namespace MediDate.Controllers
     {
         private readonly Database _database;
         private readonly ILogger<UsuarioController> _logger;
+        private readonly IEmailService _emailService;
+        
+        private static readonly string EncryptionKey = GenerateRandomKeyAndIV();
 
-        public UsuarioController(ILogger<UsuarioController> logger)
+        public UsuarioController(ILogger<UsuarioController> logger, IEmailService emailService)
         {
             _logger = logger;
             _database = new Database();
+            _emailService = emailService;  
         }
 
         public IActionResult Login()
@@ -104,6 +104,152 @@ namespace MediDate.Controllers
         public IActionResult Restablecer()
         {
             return View();
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Restablecer(string Email)
+        {
+            Correo request = new Correo();
+
+            //Verificamos si el correo ingresado es valido
+            var resultEmail = _database.Usuarios.VerificarEmail(Email);
+
+            //Si el correo es valido, enviamos el correo para restablecer la contraseña
+            if (resultEmail.Success)
+            {
+                string emailEncrypt = Encrypt(Email);
+
+                request.Destinatario = Email;
+                request.Asunto = "Restablecer contraseña - MediDate";
+                request.Mensaje = "Abrir el siguiente <a href=\"https://localhost:7141/Usuario/Actualizar?email=" + emailEncrypt + "\">enlace</a> para restablecer su contraseña.";
+
+                _emailService.SendMail(request);
+
+                TempData["SuccessMessage"] = "Se ha enviado un correo a su cuenta para restablecer su contraseña";
+                return RedirectToAction("Login", "Usuario");
+            }
+            else
+            {
+                //Si el correo no es valido
+                TempData["AlertMessage"] = "El correo ingreado no es valido, intente con otro";
+                return View();
+            }
+            
+        }
+
+        public IActionResult Actualizar(string Email)
+        {
+            string emailOriginal = Decrypt(Email);
+            //Guardamos el Email
+            Response.Cookies.Append("Email", emailOriginal);
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Actualizar(string Pass1, string Pass2)
+        {
+            //Si las contraseñas son iguales
+            if(Pass1 == Pass2)
+            {
+                //Obtenemos el valor del Email
+                if (Request.Cookies.TryGetValue("Email", out string strEmail))
+                {
+
+
+                    //Actualizamos la contraseña
+                    var result = _database.Usuarios.RestablecerPass(strEmail, Pass1);
+
+                    if (!result.Success)
+                    {
+                        //Si no se logro actualizar la contraseña
+                        TempData["AlertMessage"] = "Error al restablecer la contraseña";
+                        return View(Pass1, Pass2);
+                    }
+                    else
+                    {
+                        foreach (var cookie in Request.Cookies.Keys)
+                        {
+                            Response.Cookies.Delete(cookie);
+                        }
+
+                        TempData["SuccessMessage"] = result.Message;
+                        return RedirectToAction("Login", "Usuario");
+                    }
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Error al actualizar la contraseña";
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            else
+            {
+                //Si las contraseñas no son iguales
+                TempData["AlertMessage"] = "Las contraseñas no son iguales.";
+                return View();
+            }
+            
+        }
+
+        public static string Encrypt(string clearText)
+        {
+
+            byte[] clearBytes = Encoding.Unicode.GetBytes(clearText);
+            using (Aes encryptor = Aes.Create())
+            {
+                Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x64, 0x65, 0x64, 0x65, 0x64, 0x65, 0x64, 0x65, 0x64 });
+                encryptor.Key = pdb.GetBytes(32);
+                encryptor.IV = pdb.GetBytes(16);
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateEncryptor(), CryptoStreamMode.Write))
+                    {
+                        cs.Write(clearBytes, 0, clearBytes.Length);
+                        cs.Close();
+                    }
+                    clearText = Convert.ToBase64String(ms.ToArray());
+                }
+            }
+            return clearText;
+        }
+
+        public static string Decrypt(string cipherText)
+        {
+            cipherText = cipherText.Replace(" ", "+");
+            byte[] cipherBytes = Convert.FromBase64String(cipherText);
+            using (Aes encryptor = Aes.Create())
+            {
+                Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x64, 0x65, 0x64, 0x65, 0x64, 0x65, 0x64, 0x65, 0x64 });
+                encryptor.Key = pdb.GetBytes(32);
+                encryptor.IV = pdb.GetBytes(16);
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateDecryptor(), CryptoStreamMode.Write))
+                    {
+                        cs.Write(cipherBytes, 0, cipherBytes.Length);
+                        cs.Close();
+                    }
+                    cipherText = Encoding.Unicode.GetString(ms.ToArray());
+                }
+            }
+            return cipherText;
+        }
+
+        public static string GenerateRandomKeyAndIV()
+        {
+            using (Aes aes = Aes.Create())
+            {
+                aes.GenerateKey();
+                aes.GenerateIV();
+
+                string key = Convert.ToBase64String(aes.Key);
+                string iv = Convert.ToBase64String(aes.IV);
+
+                return $"{key}:{iv}";
+            }
         }
     }
 }

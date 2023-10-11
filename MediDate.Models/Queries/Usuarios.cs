@@ -109,5 +109,14 @@ namespace MediDate.Models.Queries
                 return db.QueryFirstOrDefault<BaseUsuario>("sp_usuarios 8,'',@Email,@Password", new { usuario.Email, usuario.Password });
             }
         }
+
+        public BaseResult RestablecerPass(string Email, string Password)
+        {
+
+            using (var db = GetConnection())
+            {
+                return db.QueryFirstOrDefault<BaseResult>("sp_usuarios 4,'',@Email,@Password", new { Email, Password });
+            }
+        }
     }
 }

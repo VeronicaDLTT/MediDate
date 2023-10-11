@@ -112,5 +112,101 @@ namespace MediDate.Controllers
             }
             
         }
+
+        public IActionResult Details()
+        {
+            //Guardamos el dato de Email
+            if (Request.Cookies.TryGetValue("Email", out string strEmail))
+            {
+                ViewBag.Email = strEmail;
+            }
+
+            //Buscamos la información por el IdMedico
+            if (Request.Cookies.TryGetValue("IdMedico", out string strIdMedico))
+            {
+                int IdMedico = Int32.Parse(strIdMedico);
+
+                var medico = _database.Medicos.GetById(IdMedico);
+
+                if (medico == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return View(medico);
+                }
+
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Error al cargar Configuración de la Cuenta";
+                return RedirectToAction("Index", "Medico");
+            }
+        }
+
+        public IActionResult Edit()
+        {
+
+            //Buscamos la información por el IdMedico
+            if (Request.Cookies.TryGetValue("IdMedico", out string strIdMedico))
+            {
+                int IdMedico = Int32.Parse(strIdMedico);
+
+                var medico = _database.Medicos.GetById(IdMedico);
+
+                if (medico == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    ViewBag.IdEspecialidad = new SelectList(_database.Especialidades.GetAll(), "IdEspecialidad", "Descripcion");
+                    return View(medico);
+                }
+
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Error al cargar Editar Cuenta";
+                return RedirectToAction("Details", "Medico");
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Medico medico)
+        {
+            try
+            {
+                //Guardamos el IdMedico
+                if (Request.Cookies.TryGetValue("IdMedico", out string strIdMedico))
+                {
+                    medico.IdMedico = Int32.Parse(strIdMedico);
+
+                    var result = _database.Medicos.Edit(medico);
+
+                    if (!result.Success)
+                    {
+                        TempData["AlertMessage"] = "La información no se pudo actualizar.";
+                        return View(medico);
+                    }
+
+                    TempData["SuccessMessage"] = result.Message;
+                    return RedirectToAction("Details", "Medico");
+
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Error al actualizar Editar Cuenta";
+                    return RedirectToAction("Index", "Medico");
+                }
+            }
+            catch (Exception e)
+            {
+                TempData["ErrorMessage"] = "Error al actualizar la información. " + e.Message;
+                return RedirectToAction("IndexPaciente", "Cita");
+            }
+        }
     }
 }

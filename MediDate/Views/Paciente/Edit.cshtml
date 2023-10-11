@@ -1,0 +1,69 @@
+﻿@model MediDate.Models.Paciente
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+@if (TempData["AlertMessage"] != null)
+{
+    <!--Error al actualizar la información-->
+    <script>
+        window.onload = function () {
+            Swal.fire('Aviso', '@TempData["AlertMessage"]', 'info');
+        }
+    </script>
+}
+
+<partial name="_MenuPacientes" />
+
+<h1>Editar Cuenta</h1>
+
+<div><label></label></div>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Nombre" class="control-label"></label>
+                <input asp-for="Nombre" class="form-control" required/>
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+            <div><label></label></div>
+            <div class="form-group">
+                <label asp-for="Apellido" class="control-label"></label>
+                <input asp-for="Apellido" class="form-control" required/>
+                <span asp-validation-for="Apellido" class="text-danger"></span>
+            </div>
+            <div><label></label></div>
+            <div class="form-group">
+                <label asp-for="FechaNacimiento" class="control-label">Fecha de Nacimiento</label>
+                <input asp-for="FechaNacimiento" class="form-control" type="date" format="dd/MM/yyyy"/>
+                <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
+            </div>
+            <div><label></label></div>
+            <div class="form-group">
+                <label asp-for="Telefono" class="control-label">Número de Celular</label>
+                <input asp-for="Telefono" class="form-control" />
+                <span asp-validation-for="Telefono" class="text-danger"></span>
+            </div>
+            <div><label></label></div>
+            <div class="form-group">
+                <div class="row d-flex justify-content-end">
+                    <div class="col-md-auto">
+                        <a class="link-dark" asp-controller="Paciente" asp-action="Details">Regresar</a>
+                    </div>
+                    <div class="col-md-auto">
+                        <input type="submit" value="Guardar" class="btn btn-primary" />
+                    </div>
+                </div>
+                
+            </div>
+        </form>
+    </div>
+</div>
+
+        </div> @*Fin Col de _MenuMedicos.cshtml*@
+    </div> @* Fin Row de _MenuMedicos.cshtml*@
+</div> @*Fin Container de _MenuMedicos.cshtml*@
+
