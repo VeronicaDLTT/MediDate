@@ -1,0 +1,59 @@
+﻿@model MediDate.Models.Cita
+
+@{
+    ViewData["Title"] = "CreatePaciente";
+}
+
+<partial name="_MenuPacientes" />
+
+<h1>Agendar Cita</h1>
+
+<h4>Cita</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreatePaciente">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            
+            <div class="form-group">
+                <label asp-for="NombreMedico" class="control-label"></label>
+                <input asp-for="NombreMedico" class="form-control" readonly/>
+                <span asp-validation-for="NombreMedico" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NombrePaciente" class="control-label"></label>
+                <input asp-for="NombrePaciente" class="form-control" readonly/>
+                <span asp-validation-for="NombrePaciente" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdDetServicio" class="control-label"></label>
+                <input asp-for="IdDetServicio" class="form-control" />
+                <span asp-validation-for="IdDetServicio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Servicio" class="control-label"></label>
+                <input asp-for="Servicio" class="form-control" />
+                <span asp-validation-for="Servicio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Fecha" class="control-label"></label>
+                <input asp-for="Fecha" class="form-control" type="date"/>
+                <span asp-validation-for="Fecha" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Hora" class="control-label"></label>
+                <input asp-for="Hora" class="form-control" type="time"/>
+                <span asp-validation-for="Hora" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Agendar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" asp-controller="Paciente">Ir a Inicio</a>
+</div>
+

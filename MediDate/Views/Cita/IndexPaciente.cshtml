@@ -36,13 +36,13 @@
                                 @Html.DisplayNameFor(model => model.Hora)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.NombreMedico)
+                                @Html.DisplayName("Especialista")
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.Servicio)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.DescEstado)
+                                @Html.DisplayName("Estado")
                             </th>
                             <th></th>
                         </tr>
@@ -52,10 +52,16 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Fecha)
+                                    @{
+                                        string fechaFormateada = item.Fecha.ToString("dd/MM/yyyy");
+                                    }
+                                    @Html.DisplayFor(modelItem => fechaFormateada)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Hora)
+                                    @{
+                                        string horaFormateada = item.Hora.ToString("HH:mm tt");
+                                    }
+                                    @Html.DisplayFor(modelItem => horaFormateada)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.NombreMedico)

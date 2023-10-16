@@ -28,4 +28,11 @@
     <Folder Include="Views\Horario\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Views\Medico\DetailsVerMas.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

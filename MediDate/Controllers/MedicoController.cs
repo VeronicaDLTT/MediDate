@@ -208,5 +208,23 @@ namespace MediDate.Controllers
                 return RedirectToAction("IndexPaciente", "Cita");
             }
         }
+
+        public IActionResult DetailsVerMas(int IdMedico)
+        {
+            //Buscamos la información por el IdMedico
+            var medico = _database.Medicos.GetById(IdMedico);
+
+            if (medico == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                //Guardamos el valor del IdMedico
+                Response.Cookies.Append("IdMedico", IdMedico.ToString());
+                return View(medico);
+            }
+
+        }
     }
 }

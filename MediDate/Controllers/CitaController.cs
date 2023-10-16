@@ -52,6 +52,85 @@ namespace MediDate.Controllers
 
         }
 
+        public IActionResult CreatePaciente()
+        {
+            //Verificamos si hay un Paciente que ha iniciado sesion
+            if (Request.Cookies.TryGetValue("IdPaciente", out string strIdPaciente))
+            {
+                //Verificamos si existe un valor en IdMedico
+                if (Request.Cookies.TryGetValue("IdMedico", out string strIdMedico))
+                {
+                    int IdPaciente = Int32.Parse(strIdPaciente);
+                    int IdMedico = Int32.Parse(strIdMedico);
+
+                    //Buscamos los datos del Paciente y del Medico
+                    var paciente = _database.Pacientes.GetById(IdPaciente);
+                    var medico = _database.Medicos.GetById(IdMedico);
+
+                    Cita cita = new Cita();
+                    cita.NombreMedico = medico.NombreCompleto;
+                    cita.NombrePaciente = paciente.NombreCompleto;
+
+                    return View(cita);
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Paciente");
+                }
+                    
+            }
+            else
+            {
+                
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreatePaciente(Cita cita)
+        {
+            //Verificamos si hay un Paciente que ha iniciado sesion
+            if (Request.Cookies.TryGetValue("IdPaciente", out string strIdPaciente))
+            {
+                //Verificamos si existe un valor en IdMedico
+                if (Request.Cookies.TryGetValue("IdMedico", out string strIdMedico))
+                {
+                    int IdPaciente = Int32.Parse(strIdPaciente);
+                    int IdMedico = Int32.Parse(strIdMedico);
+
+                    cita.IdPaciente = IdPaciente;
+                    cita.IdMedico = IdMedico;
+                    cita.Estado = 1;
+
+                    //Creamos la cita
+                    var result = _database.Citas.Create(cita);
+
+                    //Si no se pudo crear la cita
+                    if (!result.Success)
+                    {
+                        TempData["ErrorMessage"] = "Error al agendar la cita.";
+                    }
+                    else
+                    {
+                        TempData["SuccessMessage"] = result.Message;
+                        
+                    }
+                    return RedirectToAction("Index", "Paciente");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Paciente");
+                }
+
+            }
+            else
+            {
+
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

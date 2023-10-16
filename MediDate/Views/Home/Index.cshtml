@@ -46,38 +46,7 @@
     }
 </style>
 
-<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-    <div class="container">
-        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MediDate</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-            <ul class="navbar-nav flex-grow-1">
-                <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                </li>
-            </ul>
-            <ul class="navbar-nav flex-grow-2">
-                <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Login">Iniciar Sesión</a>
-                </li>
-                <li class="nav-item">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-outline-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            Registrarse
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" asp-area="" asp-controller="Paciente" asp-action="Create">Como Paciente</a></li>
-                            <li><a class="dropdown-item" asp-area="" asp-controller="Medico" asp-action="Create">Como Especialista</a></li>
-                        </ul>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<partial name="_MenuHome"/>
 
 <img src="~/img/fondo_fondo.png" width="1519px" />
 
@@ -111,6 +80,7 @@
                         <h5 class="card-title">@Html.DisplayFor(modelItem => item.NombreCompleto)</h5>
                         <p class="card-text">@Html.DisplayFor(modelItem => item.Especialidad)</p>
                         <p class="card-text"><small class="text-body-secondary">@Html.DisplayFor(modelItem => item.NumCedula)</small></p>
+                        <p class="card-text"><small class="text-body-secondary">@Html.ActionLink("Ver más", "DetailsVerMas","Medico", new { IdMedico=item.IdMedico })</small></p>
                     </div>
                 </div>
             </div>
@@ -161,8 +131,6 @@
     function handleItemSelected(item) {
         document.getElementById('txtBuscar').value = item;
     }
-
-    
 
 </script>
 

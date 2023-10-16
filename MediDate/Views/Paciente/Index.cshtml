@@ -13,9 +13,21 @@
     </script>
 }
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <!--Cita agendada exitosamente-->
+    <script>
+        window.onload = function () {
+            Swal.fire('Aviso', '@TempData["SuccessMessage"]', 'success');
+        }
+    </script>
+}
+
         <partial name="_MenuPacientes" />
 
         <h1>Bienvenido a MediDate</h1>
+
+        <partial name="_ListaMedicos" />
 
         </div> @*Fin Col de _MenuMedicos.cshtml*@
     </div> @* Fin Row de _MenuMedicos.cshtml*@

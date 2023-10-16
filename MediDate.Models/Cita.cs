@@ -13,7 +13,7 @@ namespace MediDate.Models
         public int IdDetServicio { get; set; }
         public string Servicio { get; set; }
         public DateTime Fecha { get; set; }
-        public TimeOnly Hora { get; set; }
+        public DateTime Hora { get; set; }
         public int Estado { get; set; }
         public string DescEstado { get; set; }
     }

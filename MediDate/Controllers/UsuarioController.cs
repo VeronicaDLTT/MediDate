@@ -62,9 +62,9 @@ namespace MediDate.Controllers
                         }
                         else if (resultUsuario.TipoUsuario == 'P')
                         {
-                            //Si el Tipo de Usuario es P muestro la pagina principal de Citas Paciente
+                            //Si el Tipo de Usuario es P muestro Index Paciente
                             Response.Cookies.Append("IdPaciente", resultUsuario.IdPaciente.ToString());
-                            return RedirectToAction("IndexPaciente", "Cita");
+                            return RedirectToAction("Index", "Paciente");
                         }
                         else
                         {

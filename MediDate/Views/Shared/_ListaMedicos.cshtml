@@ -1,0 +1,96 @@
+﻿@model IEnumerable<MediDate.Models.Medico>
+
+<style>
+    #ddBusqueda {
+        position: absolute;
+        z-index: 9999;
+        background-color: white;
+        padding: 10px;
+        border: 1px solid #ccc;
+        width: 900px;
+        box-sizing: border-box;
+    }
+</style>
+
+<div class="container">
+
+    <form asp-action="Index">
+        <div class="row" style="display: flex; justify-content: center;">
+            <div class="col-9">
+                <input id="txtBuscar" name="txtBuscar" onkeyup="getDropdownData()" type="text" class="form-control" placeholder="Especialidad, Servicio, Nombre" autocomplete="off">
+                <ul id="ddBusqueda" style="display:none;" class="list-group-item"></ul>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Buscar</button>
+            </div>
+        </div>
+    </form>
+
+    <div><label></label></div>
+
+    <table class="table">
+        @foreach (var item in Model)
+        {
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="~/img/img_medico.png" class="img-fluid rounded-start" alt="Médico">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">@Html.DisplayFor(modelItem => item.NombreCompleto)</h5>
+                            <p class="card-text">@Html.DisplayFor(modelItem => item.Especialidad)</p>
+                            <p class="card-text"><small class="text-body-secondary">@Html.DisplayFor(modelItem => item.NumCedula)</small></p>
+                            <p class="card-text"><small class="text-body-secondary">@Html.ActionLink("Ver más", "DetailsVerMas","Medico", new { IdMedico=item.IdMedico })</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </table>
+</div>
+
+<script>
+
+    @*Mostrar lista desplegable para el buscador*@
+        function getDropdownData() {
+            const txtBuscar = document.getElementById('txtBuscar').value;
+
+            $.ajax({
+                url: `/Home/GetDropdownData?txtBuscar=${txtBuscar}`,
+                type: 'GET',
+                success: function (data) {
+
+
+                    const dropdown = document.getElementById('ddBusqueda');
+
+                    dropdown.innerHTML = '';
+
+                    if (data.length === 0) {
+                        dropdown.style.display = 'none';
+                    } else {
+
+                        data.forEach(item => {
+                            const listItem = document.createElement('li');
+                            listItem.textContent = item;
+                            listItem.classList = 'list-group-item list-group-item-action';
+                            listItem.addEventListener('click', function () {
+                                listItem.classList = 'list-group-item active';
+                                handleItemSelected(item);
+                                dropdown.style.display = 'none';
+                            });
+                            dropdown.appendChild(listItem);
+                        });
+
+                        dropdown.style.display = 'block';
+                    }
+                }
+            });
+        }
+
+    @*Pone la opcion seleccionada de la lista desplegable en el input del buscador*@
+        function handleItemSelected(item) {
+            document.getElementById('txtBuscar').value = item;
+        }
+
+</script>

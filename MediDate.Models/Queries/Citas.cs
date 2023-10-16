@@ -55,5 +55,16 @@ namespace MediDate.Models.Queries
                 return db.QueryFirstOrDefault<Cita>("sp_citas 4,@IdCita,''", new { IdCita });
             }
         }
+
+        public BaseResult Create(Cita cita)
+        {
+
+            using (var db = GetConnection())
+            {
+                return db.QueryFirstOrDefault<BaseResult>(
+                    "sp_citas 1,'',@IdMedico,@IdPaciente,@IdDetServicio,@Fecha,@Hora,@Estado", 
+                    new {cita.IdMedico, cita.IdPaciente, cita.IdDetServicio, cita.Fecha, cita.Hora, cita.Estado });
+            }
+        }
     }
 }
