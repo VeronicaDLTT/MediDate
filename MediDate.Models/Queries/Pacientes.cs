@@ -51,5 +51,17 @@ namespace MediDate.Models.Queries
             }
         }
 
+        public List<Paciente> GetAllPacientesCorreos(string Nombre)
+        {
+            var Pacientes = new List<Paciente>();
+
+            using (var db = GetConnection())
+            {
+                Pacientes = db.Query<Paciente>("sp_pacientes 6,'','',@Nombre", new {Nombre}).ToList();
+            }
+
+            return Pacientes;
+        }
+
     }
 }

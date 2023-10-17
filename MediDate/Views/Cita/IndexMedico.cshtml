@@ -4,13 +4,23 @@
     ViewData["Title"] = "Index";
 }
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <!--Cita agendada exitosamente-->
+    <script>
+        window.onload = function () {
+            Swal.fire('Aviso', '@TempData["SuccessMessage"]', 'success');
+        }
+    </script>
+}
+
 <partial name="_MenuMedicos" />
 
         <h1>Mis Citas</h1>
 
         @*<p class="d-flex justify-content-end">*@
         <p>
-            <a class="btn btn-primary" asp-controller="Cita" asp-action="IndexMedico">Agendar</a>
+            <a class="btn btn-primary" asp-controller="Cita" asp-action="CreateMedico">Agendar</a>
         </p>
 
         <div class="table-responsive">

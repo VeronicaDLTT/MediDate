@@ -80,7 +80,7 @@
                         <h5 class="card-title">@Html.DisplayFor(modelItem => item.NombreCompleto)</h5>
                         <p class="card-text">@Html.DisplayFor(modelItem => item.Especialidad)</p>
                         <p class="card-text"><small class="text-body-secondary">@Html.DisplayFor(modelItem => item.NumCedula)</small></p>
-                        <p class="card-text"><small class="text-body-secondary">@Html.ActionLink("Ver más", "DetailsVerMas","Medico", new { IdMedico=item.IdMedico })</small></p>
+                        <p class="card-text"><small class="text-body-secondary">@Html.ActionLink("Ver más", "DetailsHome","Medico", new { IdMedico=item.IdMedico })</small></p>
                     </div>
                 </div>
             </div>

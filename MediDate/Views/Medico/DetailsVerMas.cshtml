@@ -1,58 +1,14 @@
-﻿@model MediDate.Models.Medico
-
-@{
-    ViewData["Title"] = "Details";
+﻿@{
+    ViewData["Title"] = "DetailsVerMas";
 }
 
-@if (TempData["SuccessMessage"] != null)
-{
-    <!--Información actualizada exitosamente-->
-    <script>
-        window.onload = function () {
-            Swal.fire('Aviso', '@TempData["SuccessMessage"]', 'success');
-        }
-    </script>
-}
+<partial name="_MenuPacientes" />
 
-@if (TempData["ErrorMessage"] != null)
-{
-    <!--No se pueden cargar Editar Cuenta-->
-    <script>
-        window.onload = function () {
-            Swal.fire('Aviso', '@TempData["ErrorMessage"]', 'error');
-        }
-    </script>
-}
+<partial name="_DetallesMedico" />
 
-
-<partial name="_MenuHome" />
-
-<div class="container">
-
-    <div><label></label></div>
-
-    <div class="row justify-content-center">
-        <div class="col-md-auto align-self-center">
-            <h4>@Html.DisplayFor(model => model.NombreCompleto)</h4>
-        </div>
-    </div>
-
-    <div class="row justify-content-center">
-        <div class="col-md-auto align-self-center">
-            <p>@Html.DisplayFor(model => model.Especialidad)</p>
-        </div>
-    </div>
-
-    <div class="row justify-content-center">
-        <div class="col-md-auto align-self-center">
-            <p>@Html.DisplayFor(model => model.NumCedula)</p>
-        </div>
-    </div>
-
-    <div class="row justify-content-center">
-        <div class="col-md-auto align-self-center">
-            <a class="btn btn-primary" asp-controller="Cita" asp-action="CreatePaciente">Agendar</a>
-        </div>
+<div class="row justify-content-center">
+    <div class="col-md-auto align-self-center">
+        <a class="nav-link" asp-action="Index" asp-controller="Paciente">Ir a Inicio</a>
     </div>
 </div>
 

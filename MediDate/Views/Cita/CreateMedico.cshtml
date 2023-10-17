@@ -1,0 +1,115 @@
+﻿@model MediDate.Models.Cita
+
+@{
+    ViewData["Title"] = "CreateMedico";
+}
+
+<style>
+    #ddBusqueda {
+        position: absolute;
+        z-index: 9999;
+        background-color: white;
+        padding: 10px;
+        border: 1px solid #ccc;
+        width: 900px;
+        box-sizing: border-box;
+    }
+</style>
+
+<partial name="_MenuMedicos" />
+
+<h1>Agendar Cita</h1>
+
+<h4>Cita</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateMedico">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group">
+                <label asp-for="NombrePaciente" class="control-label">Paciente</label>
+                
+                <input id="txtBuscar" name="txtBuscar" onkeyup="getDropdownData()" type="text" class="form-control" placeholder="Nombre, Apellido, Correo" autocomplete="off">
+                <ul id="ddBusqueda" style="display:none;" ></ul>
+                
+                <span asp-validation-for="NombrePaciente" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdDetServicio" class="control-label">Servicio</label>
+                @if (ViewBag.IdDetServicio != null)
+                {
+                    <select asp-for="IdDetServicio" asp-items="@ViewBag.IdDetServicio" class="form-control"></select>
+                }
+                else
+                {
+                    <p>No hay datos de servicio disponibles.</p>
+                }
+                <span asp-validation-for="IdDetServicio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Fecha" class="control-label"></label>
+                <input asp-for="Fecha" class="form-control" type="date" />
+                <span asp-validation-for="Fecha" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Hora" class="control-label"></label>
+                <input asp-for="Hora" class="form-control" type="time" />
+                <span asp-validation-for="Hora" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Agendar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="IndexMedico" asp-controller="Cita">Ir a Mis citas</a>
+</div>
+
+<script>
+    
+    @*Mostrar lista desplegable para el buscador*@
+    function getDropdownData() {
+        const txtBuscar = document.getElementById('txtBuscar').value;
+
+        $.ajax({
+            url: `/Cita/GetDropdownData?txtBuscar=${txtBuscar}`,
+            type: 'GET',
+            success: function (data) {
+
+
+                const dropdown = document.getElementById('ddBusqueda');
+
+                dropdown.innerHTML = '';
+
+                if (data.length === 0) {
+                    dropdown.style.display = 'none';
+                } else {
+
+                    data.forEach(item => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = item;
+                        listItem.classList = 'list-group-item list-group-item-action';
+                        listItem.addEventListener('click', function () {
+                            listItem.classList = 'list-group-item active';
+                            handleItemSelected(item);
+                            dropdown.style.display = 'none';
+                        });
+                        dropdown.appendChild(listItem);
+                    });
+
+                    dropdown.style.display = 'block';
+                }
+            }
+        });
+    }
+
+    @*Pone la opcion seleccionada de la lista desplegable en el input del buscador*@
+    function handleItemSelected(item) {
+        document.getElementById('txtBuscar').value = item;
+    }
+
+</script>
+

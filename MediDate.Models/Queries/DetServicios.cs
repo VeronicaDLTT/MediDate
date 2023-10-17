@@ -15,13 +15,13 @@ namespace MediDate.Models.Queries
         /// Mostrar todos los DetServicios de la tabla DetServicios por IdMedico
         /// </summary>
         /// <returns>Lista de DetServicios</returns>
-        public List<DetServicio> GetAllByMedico()
+        public List<DetServicio> GetAllByMedico(int IdMedico)
         {
             var detServicios = new List<DetServicio>();
 
             using(var db = GetConnection())
             {
-                detServicios = db.Query<DetServicio>("sp_detServicios 5,'','','',@IdMedico").ToList();
+                detServicios = db.Query<DetServicio>("sp_detServicios 6,'','','',@IdMedico", new {IdMedico}).ToList();
             }
 
             return detServicios;

@@ -1,0 +1,50 @@
+﻿@model MediDate.Models.Medico
+
+<div class="container">
+
+    <div><label></label></div>
+
+    @*Información del Medico*@
+    <div class="row justify-content-center">
+        <div class="col-md-auto align-self-center">
+            <h4>@Html.DisplayFor(model => model.NombreCompleto)</h4>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-auto align-self-center">
+            <p>@Html.DisplayFor(model => model.Especialidad)</p>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-auto align-self-center">
+            <p>@Html.DisplayFor(model => model.NumCedula)</p>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-auto align-self-center">
+            <a class="btn btn-primary" asp-controller="Cita" asp-action="CreatePaciente">Agendar</a>
+        </div>
+    </div>
+
+    @*Información del consultorio*@
+    <div class="row justify-content-center">
+        <div class="col-md-auto align-self-center">
+            <h4>Información del Consultorio</h4>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-auto align-self-center">
+            <h3>@ViewBag.NombreCon</h3>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-auto align-self-center">
+            <p>Direccion: @ViewBag.DireccionCon</p>
+        </div>
+    </div>
+</div>

@@ -40,6 +40,14 @@ namespace MediDate.Models.Queries
             }
         }
 
+        public Consultorio GetByIdMedico(int IdMedico)
+        {
+            using (var db = GetConnection())
+            {
+                return db.QueryFirstOrDefault<Consultorio>("sp_consultorios 6,'',@IdMedico", new { IdMedico });
+            }
+        }
+
         /// <summary>
         /// Crea un nuevo Consultorio en la tabla Consultorios
         /// </summary>

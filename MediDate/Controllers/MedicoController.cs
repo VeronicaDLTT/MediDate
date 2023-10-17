@@ -222,6 +222,38 @@ namespace MediDate.Controllers
             {
                 //Guardamos el valor del IdMedico
                 Response.Cookies.Append("IdMedico", IdMedico.ToString());
+
+                //Buscamos la informacion del Consultorio por el IdMedico
+                var consultorio = _database.Consultorios.GetByIdMedico(IdMedico);
+
+                ViewBag.NombreCon = consultorio.Descripcion;
+                ViewBag.DireccionCon = consultorio.Calle + ", " + consultorio.Colonia + ", " + consultorio.NumExterior + ", " + consultorio.CodigoPostal;
+
+                return View(medico);
+            }
+
+        }
+
+        public IActionResult DetailsHome(int IdMedico)
+        {
+            //Buscamos la información por el IdMedico
+            var medico = _database.Medicos.GetById(IdMedico);
+
+            if (medico == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                //Guardamos el valor del IdMedico
+                Response.Cookies.Append("IdMedico", IdMedico.ToString());
+
+                //Buscamos la informacion del Consultorio por el IdMedico
+                var consultorio = _database.Consultorios.GetByIdMedico(IdMedico);
+
+                ViewBag.NombreCon = consultorio.Descripcion;
+                ViewBag.DireccionCon = consultorio.Calle + ", " + consultorio.Colonia + ", " + consultorio.NumExterior + ", " + consultorio.CodigoPostal;
+
                 return View(medico);
             }
 
