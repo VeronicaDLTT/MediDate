@@ -21,7 +21,19 @@ namespace MediDate.Models.Queries
 
             using(var db = GetConnection())
             {
-                detServicios = db.Query<DetServicio>("sp_detServicios 6,'','','',@IdMedico", new {IdMedico}).ToList();
+                detServicios = db.Query<DetServicio>("sp_detServicios 7,'','','',@IdMedico", new {IdMedico}).ToList();
+            }
+
+            return detServicios;
+        }
+
+        public List<DetServicio> GetAllByIdMedico(int IdMedico)
+        {
+            var detServicios = new List<DetServicio>();
+
+            using (var db = GetConnection())
+            {
+                detServicios = db.Query<DetServicio>("sp_detServicios 6,'','','',@IdMedico", new { IdMedico }).ToList();
             }
 
             return detServicios;
@@ -39,6 +51,28 @@ namespace MediDate.Models.Queries
                 return db.QueryFirstOrDefault<Servicio>("sp_detServicios 4,@IdDetServicio,''", new { IdDetServicio });
             }
         }
-        
+
+        public BaseResult Create(DetServicio detServicio)
+        {
+
+            using (var db = GetConnection())
+            {
+                return db.QueryFirstOrDefault<BaseResult>(
+                    "sp_detServicios 1,'',@IdServicio,@IdConsultorio,@IdMedico,@Costo",
+                    new { detServicio.IdServicio, detServicio.IdConsultorio, detServicio.IdMedico, detServicio.Costo });
+            }
+        }
+
+        public BaseResult Create2(DetServicio detServicio)
+        {
+
+            using (var db = GetConnection())
+            {
+                return db.QueryFirstOrDefault<BaseResult>(
+                    "sp_detServicios 8,'',@IdServicio,@IdConsultorio,@IdMedico,@Costo, @Servicio",
+                    new { detServicio.IdServicio, detServicio.IdConsultorio, detServicio.IdMedico, detServicio.Costo, detServicio.Servicio });
+            }
+        }
+
     }
 }

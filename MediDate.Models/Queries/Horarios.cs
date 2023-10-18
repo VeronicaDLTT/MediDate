@@ -32,11 +32,11 @@ namespace MediDate.Models.Queries
         /// </summary>
         /// <param name="IdHorario"></param>
         /// <returns>Registro de Horario que conincida con IdHorario</returns>
-        public Servicio GetById(int IdHorario)
+        public Horario GetById(int IdHorario)
         {
             using (var db = GetConnection())
             {
-                return db.QueryFirstOrDefault<Servicio>("sp_horarios 4,@IdHorario,''", new { IdHorario });
+                return db.QueryFirstOrDefault<Horario>("sp_horarios 4,@IdHorario,''", new { IdHorario });
             }
         }
 
@@ -45,14 +45,23 @@ namespace MediDate.Models.Queries
         /// </summary>
         /// <param name="IdMedico"></param>
         /// <returns>Registro de Horario que conincida con IdMedico</returns>
-        public Servicio GetByIdMedico(int IdMedico)
+        public Horario GetByIdMedico(int IdMedico)
         {
             using (var db = GetConnection())
             {
-                return db.QueryFirstOrDefault<Servicio>("sp_horarios 6,'',@IdMedico", new { IdMedico });
+                return db.QueryFirstOrDefault<Horario>("sp_horarios 6,'',@IdMedico", new { IdMedico });
             }
         }
 
-        
+        public BaseResult Create(Horario horario)
+        {
+
+            using (var db = GetConnection())
+            {
+                return db.QueryFirstOrDefault<BaseResult>(
+                    "sp_horarios 1,'',@IdMedico,@HoraInicio,@HoraFin",
+                    new { horario.IdMedico, horario.HoraInicio, horario.HoraFin });
+            }
+        }
     }
 }

@@ -1,7 +1,7 @@
-﻿@model MediDate.Models.Cita
+﻿@model MediDate.Models.DetServicio
 
 @{
-    ViewData["Title"] = "CreateMedico";
+    ViewData["Title"] = "Create";
 }
 
 <style>
@@ -18,46 +18,30 @@
 
 <partial name="_MenuMedicos" />
 
-<h1>Agendar Cita</h1>
+<h1>Agregar Servicio</h1>
 
-<hr />
+<div><label></label></div>
+
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="CreateMedico">
+        <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             
             <div class="form-group">
-                <label asp-for="NombrePaciente" class="control-label">Paciente</label>
-                
+                <label asp-for="IdServicio" class="control-label">Servicio</label>
                 <input id="txtBuscar" name="txtBuscar" onkeyup="getDropdownData()" type="text" class="form-control" placeholder="Nombre, Apellido, Correo" autocomplete="off">
-                <ul id="ddBusqueda" style="display:none;" ></ul>
-                
-                <span asp-validation-for="NombrePaciente" class="text-danger"></span>
+                <ul id="ddBusqueda" style="display:none;"></ul>
+                <span asp-validation-for="IdServicio" class="text-danger"></span>
             </div>
+            <div><label></label></div>
             <div class="form-group">
-                <label asp-for="IdDetServicio" class="control-label">Servicio</label>
-                @if (ViewBag.IdDetServicio != null)
-                {
-                    <select asp-for="IdDetServicio" asp-items="@ViewBag.IdDetServicio" class="form-control"></select>
-                }
-                else
-                {
-                    <p>No hay datos de servicio disponibles.</p>
-                }
-                <span asp-validation-for="IdDetServicio" class="text-danger"></span>
+                <label asp-for="Costo" class="control-label"></label>
+                <input asp-for="Costo" class="form-control" />
+                <span asp-validation-for="Costo" class="text-danger"></span>
             </div>
+            <div><label></label></div>
             <div class="form-group">
-                <label asp-for="Fecha" class="control-label"></label>
-                <input asp-for="Fecha" class="form-control" type="date" />
-                <span asp-validation-for="Fecha" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Hora" class="control-label"></label>
-                <input asp-for="Hora" class="form-control" type="time" />
-                <span asp-validation-for="Hora" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Agendar" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -67,14 +51,18 @@
     <a asp-action="IndexMedico" asp-controller="Cita">Ir a Mis citas</a>
 </div>
 
+        </div> @*Fin Col de _MenuMedicos.cshtml*@
+    </div> @* Fin Row de _MenuMedicos.cshtml*@
+</div> @*Fin Container de _MenuMedicos.cshtml*@
+
 <script>
-    
+
     @*Mostrar lista desplegable para el buscador*@
     function getDropdownData() {
         const txtBuscar = document.getElementById('txtBuscar').value;
 
         $.ajax({
-            url: `/Cita/GetDropdownData?txtBuscar=${txtBuscar}`,
+            url: `/DetServicio/GetDropdownData?txtBuscar=${txtBuscar}`,
             type: 'GET',
             success: function (data) {
 

@@ -226,8 +226,20 @@ namespace MediDate.Controllers
                 //Buscamos la informacion del Consultorio por el IdMedico
                 var consultorio = _database.Consultorios.GetByIdMedico(IdMedico);
 
+                //Buscamos la informacion del Horario de atención por el IdMedico
+                var horario = _database.Horarios.GetByIdMedico(IdMedico);
+
                 ViewBag.NombreCon = consultorio.Descripcion;
                 ViewBag.DireccionCon = consultorio.Calle + ", " + consultorio.Colonia + ", " + consultorio.NumExterior + ", " + consultorio.CodigoPostal;
+                
+                if (horario == null)
+                {
+                    ViewBag.Horario = "No disponible";
+                }
+                else
+                {
+                    ViewBag.Horario = horario.HoraInicio.ToString("hh:mm tt") + " - " + horario.HoraFin.ToString("hh:mm tt");
+                }
 
                 return View(medico);
             }
@@ -251,9 +263,21 @@ namespace MediDate.Controllers
                 //Buscamos la informacion del Consultorio por el IdMedico
                 var consultorio = _database.Consultorios.GetByIdMedico(IdMedico);
 
+                //Buscamos la informacion del Horario de atención por el IdMedico
+                var horario = _database.Horarios.GetByIdMedico(IdMedico);
+
                 ViewBag.NombreCon = consultorio.Descripcion;
                 ViewBag.DireccionCon = consultorio.Calle + ", " + consultorio.Colonia + ", " + consultorio.NumExterior + ", " + consultorio.CodigoPostal;
-
+                
+                if(horario == null)
+                {
+                    ViewBag.Horario = "No disponible";
+                }
+                else
+                {
+                    ViewBag.Horario = horario.HoraInicio.ToString("hh:mm tt") + " - " + horario.HoraFin.ToString("hh:mm tt");
+                }
+                 
                 return View(medico);
             }
 

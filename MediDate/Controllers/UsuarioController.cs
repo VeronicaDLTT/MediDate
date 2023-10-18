@@ -54,11 +54,26 @@ namespace MediDate.Controllers
                         Response.Cookies.Append("TipoUsuario", resultUsuario.TipoUsuario.ToString());
                         Response.Cookies.Append("Email", resultUsuario.Email);
 
-                        //Si el Tipo de Usuario es M muestro la pagina principal de Citas Medico
+                        //Si el Tipo de Usuario es M
                         if (resultUsuario.TipoUsuario == 'M')
                         {
+                            
                             Response.Cookies.Append("IdMedico", resultUsuario.IdMedico.ToString());
-                            return RedirectToAction("IndexMedico", "Cita");
+
+                            //Verifico si el Medico ya tiene un Horario de Atencion registrado
+                            var horario = _database.Horarios.GetByIdMedico((int)resultUsuario.IdMedico);
+
+                            if(horario == null)
+                            {
+                                //Si el Medico no tiene un horario le mostramos la vista para guardar el horario
+                                return RedirectToAction("Create", "Horario");
+                            }
+                            else
+                            {
+                                //Si si tiene un horario registrado le mostramos la vista de sus Citas
+                                return RedirectToAction("IndexMedico", "Cita");
+                            }
+                            
                         }
                         else if (resultUsuario.TipoUsuario == 'P')
                         {

@@ -22,7 +22,11 @@ namespace MediDate.Controllers
 
         public IActionResult Index()
         {
-            
+            foreach (var cookie in Request.Cookies.Keys)
+            {
+                Response.Cookies.Delete(cookie);
+            }
+
             return View(_database.Medicos.GetAll());
         }
 

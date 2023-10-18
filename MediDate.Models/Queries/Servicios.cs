@@ -27,6 +27,18 @@ namespace MediDate.Models.Queries
             return servicios;
         }
 
+        public List<Servicio> GetAllIdServicioDesc(string Descripcion)
+        {
+            var servicios = new List<Servicio>();
+
+            using (var db = GetConnection())
+            {
+                servicios = db.Query<Servicio>("sp_servicios 7,'',@Descripcion", new {Descripcion}).ToList();
+            }
+
+            return servicios;
+        }
+
         public Servicio GetById(int IdServicio)
         {
             using (var db = GetConnection())
