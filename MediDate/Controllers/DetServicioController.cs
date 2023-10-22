@@ -39,7 +39,7 @@ namespace MediDate.Controllers
 
         public IActionResult Create()
         {
-           
+            ViewBag.Servicios = new SelectList(_database.Servicios.GetAll(), "IdServicio", "Descripcion");
             return View();
         }
 
@@ -49,8 +49,6 @@ namespace MediDate.Controllers
         {
             if (Request.Cookies.TryGetValue("IdMedico", out string strMedico))
             {
-                var arrayServicios = txtBuscar.Split('-');
-
                 int IdMedico = Int32.Parse(strMedico);
 
                 //Buscamos la informacion del Consultorio por el IdMedico
@@ -59,10 +57,9 @@ namespace MediDate.Controllers
                 detServicio.IdMedico = IdMedico;
                 detServicio.IdConsultorio = consultorio.IdConsultorio;
 
-                if (arrayServicios[0].Equals(txtBuscar))
+                if (detServicio.Servicio != null)
                 {
-                    
-                    detServicio.Servicio = txtBuscar;
+
 
                     //Agregamos el Servicio en la tabla Servicios y DetServicios
                     var result = _database.DetServicios.Create2(detServicio);
@@ -71,6 +68,8 @@ namespace MediDate.Controllers
                     {
 
                         TempData["AlertMessage"] = "Error al registrar el servicio. Intente de nuevo. ";
+                        ViewBag.Servicios = new SelectList(_database.Servicios.GetAll(), "IdServicio", "Descripcion");
+
                         return View(detServicio);
                     }
 
@@ -79,8 +78,6 @@ namespace MediDate.Controllers
                 }
                 else
                 {
-                    string strIdServicio = arrayServicios[0];
-                    detServicio.IdServicio = Int32.Parse(strMedico);
 
                     //Agregamos en la tabla DetServicios
                     var result = _database.DetServicios.Create(detServicio);
@@ -89,18 +86,96 @@ namespace MediDate.Controllers
                     {
 
                         TempData["AlertMessage"] = "Error al registrar el servicio. Intente de nuevo. ";
+                        ViewBag.Servicios = new SelectList(_database.Servicios.GetAll(), "IdServicio", "Descripcion");
+
                         return View(detServicio);
                     }
 
                     TempData["SuccessMessage"] = result.Message;
                     return RedirectToAction("Index", "DetServicio");
                 }
-                
+
             }
             else
             {
                 TempData["ErrorMessage"] = "No se pudo cargar la lista de Citas";
                 return RedirectToAction("Index", "Medico");
+            }
+        }
+
+        public IActionResult Edit (int IdDetServicio)
+        {
+            //Buscamos el DetServicio por su Id
+            var detServicio = _database.DetServicios.GetById(IdDetServicio);
+
+            if (detServicio == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return View(detServicio);
+            }
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(DetServicio detServicio)
+        {
+            //Actualizamos la Descripcion en la tabla de Servicios
+            Servicio servicio = new Servicio();
+            servicio.IdServicio = detServicio.IdServicio;
+            servicio.Descripcion = detServicio.Servicio;
+
+            var result = _database.Servicios.Edit(servicio);
+
+            //Actualizamos el Costo en la tabla de DetServicios
+            var result2 = _database.DetServicios.Edit(detServicio);
+
+            if (!result.Success && !result2.Success)
+            {
+                TempData["AlertMessage"] = "Error al modificar el servicio. Intente de nuevo. ";
+                return View(detServicio);
+            }
+            else
+            {
+                TempData["SuccessMessage"] = result2.Message;
+                return RedirectToAction("Index", "DetServicio");
+            }
+        }
+
+        public IActionResult Delete(int IdDetServicio)
+        {
+            //Buscamos el DetServicio por su Id
+            var detServicio = _database.DetServicios.GetById(IdDetServicio);
+
+            if (detServicio == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return View(detServicio);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int IdDetServicio)
+        {
+            //Eliminamos el servicio
+            var result = _database.DetServicios.Delete(IdDetServicio);
+
+            if (!result.Success)
+            {
+                TempData["AlertMessage"] = "Error al eliminar el servicio. Intente de nuevo. ";
+                return View(IdDetServicio);
+            }
+            else
+            {
+                TempData["SuccessMessage"] = result.Message;
+                return RedirectToAction("Index", "DetServicio");
             }
         }
 

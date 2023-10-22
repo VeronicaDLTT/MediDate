@@ -63,5 +63,16 @@ namespace MediDate.Models.Queries
                     new { horario.IdMedico, horario.HoraInicio, horario.HoraFin });
             }
         }
+
+        public BaseResult Edit(Horario horario)
+        {
+
+            using (var db = GetConnection())
+            {
+                return db.QueryFirstOrDefault<BaseResult>(
+                    "sp_horarios 3,@IdHorario,'',@HoraInicio,@HoraFin",
+                    new { horario.IdHorario, horario.HoraInicio, horario.HoraFin });
+            }
+        }
     }
 }

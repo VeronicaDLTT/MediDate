@@ -44,11 +44,11 @@ namespace MediDate.Models.Queries
         /// </summary>
         /// <param name="IdDetServicio"></param>
         /// <returns>Registro de DetServicio que conincida con IdDetServicio</returns>
-        public Servicio GetById(int IdDetServicio)
+        public DetServicio GetById(int IdDetServicio)
         {
             using (var db = GetConnection())
             {
-                return db.QueryFirstOrDefault<Servicio>("sp_detServicios 4,@IdDetServicio,''", new { IdDetServicio });
+                return db.QueryFirstOrDefault<DetServicio>("sp_detServicios 4,@IdDetServicio,''", new { IdDetServicio });
             }
         }
 
@@ -69,8 +69,30 @@ namespace MediDate.Models.Queries
             using (var db = GetConnection())
             {
                 return db.QueryFirstOrDefault<BaseResult>(
-                    "sp_detServicios 8,'',@IdServicio,@IdConsultorio,@IdMedico,@Costo, @Servicio",
+                    "sp_detServicios 8,'',@IdServicio,@IdConsultorio,@IdMedico,@Costo,@Servicio",
                     new { detServicio.IdServicio, detServicio.IdConsultorio, detServicio.IdMedico, detServicio.Costo, detServicio.Servicio });
+            }
+        }
+
+        public BaseResult Edit(DetServicio detServicio)
+        {
+
+            using (var db = GetConnection())
+            {
+                return db.QueryFirstOrDefault<BaseResult>(
+                    "sp_detServicios 3,@IdDetServicio,'','','',@Costo, ''",
+                    new { detServicio.IdDetServicio, detServicio.Costo });
+            }
+        }
+
+        public BaseResult Delete(int IdDetServicio)
+        {
+
+            using (var db = GetConnection())
+            {
+                return db.QueryFirstOrDefault<BaseResult>(
+                    "sp_detServicios 2,@IdDetServicio",
+                    new { IdDetServicio });
             }
         }
 

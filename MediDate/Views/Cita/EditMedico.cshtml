@@ -1,0 +1,84 @@
+﻿@model MediDate.Models.Cita
+
+@{
+    ViewData["Title"] = "EditPaciente";
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <!--Modal si ocurre una excepción-->
+    <script>
+        window.onload = function () {
+            Swal.fire('Aviso', '@TempData["ErrorMessage"]', 'error');
+        }
+    </script>
+}
+
+@if (TempData["AlertMessage"] != null)
+{
+    <!--Modal si ocurre una excepción-->
+    <script>
+        window.onload = function () {
+            Swal.fire('Aviso', '@TempData["AlertMessage"]', 'info');
+        }
+    </script>
+}
+
+<partial name="_MenuMedicos" />
+
+<div><label></label></div>
+
+<div class="row justify-content-center">
+    <div class="col-md-auto align-self-center">
+        <h1>Editar Cita</h1>
+    </div>
+</div>
+
+<div><label></label></div>
+
+<div class="row justify-content-center">
+    <div class="col-md-4 align-self-center">
+        <form asp-action="EditMedico">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="IdCita" class="form-control" type="hidden"/>
+                <input asp-for="IdMedico" class="form-control" type="hidden" />
+                <input asp-for="IdPaciente" class="form-control" type="hidden" />
+            </div>
+            <div><label></label></div>
+            <div class="form-group">
+                <label asp-for="NombrePaciente" class="control-label">Paciente</label>
+                <input asp-for="NombrePaciente" class="form-control" readonly/>
+                <span asp-validation-for="NombrePaciente" class="text-danger"></span>
+            </div>
+            <div><label></label></div>
+            <div class="form-group">
+                <label asp-for="Servicio" class="control-label"></label>
+                <input asp-for="Servicio" class="form-control" readonly/>
+                <span asp-validation-for="Servicio" class="text-danger"></span>
+            </div>
+            <div><label></label></div>
+            <div class="form-group">
+                <label asp-for="Fecha" class="control-label"></label>
+                <input asp-for="Fecha" class="form-control" type="date" min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" required />
+                <span asp-validation-for="Fecha" class="text-danger"></span>
+            </div>
+            <div><label></label></div>
+            <div class="form-group">
+                <label asp-for="Hora" class="control-label"></label>
+                <input asp-for="Hora" class="form-control" type="time" min="@ViewBag.HoraInicio" max="@ViewBag.HoraFin" step="3600" required />
+                <span asp-validation-for="Hora" class="text-danger"></span>
+            </div>
+            <div><label></label></div>
+            <div class="row justify-content-end">
+                <div class="col-md-auto">
+                    <a class="nav-link text-black" asp-action="IndexMedico" asp-controller="Cita">Regresar</a>
+                </div>
+                <div class="col-md-auto">
+                    <input type="submit" value="Reagendar" class="btn btn-primary" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

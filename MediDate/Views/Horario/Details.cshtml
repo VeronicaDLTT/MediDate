@@ -1,0 +1,71 @@
+﻿@model MediDate.Models.Horario
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <!--Horario modificado exitosamente-->
+    <script>
+        window.onload = function () {
+            Swal.fire('Aviso', '@TempData["SuccessMessage"]', 'success');
+        }
+    </script>
+}
+
+<partial name="_MenuMedicos" />
+
+<div class="row justify-content-center">
+    <div class="col-md-auto align-self-center">
+        <h1>Horario de atención</h1>
+    </div>
+</div>
+
+<div><label></label></div>
+
+<div class="row justify-content-center">
+    <div class="col-md-auto align-self-center">
+
+        <div class="card" style="width: 35rem;">
+            <div class="card-body">
+                <div>
+                    <dl class="row">
+
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.HoraInicio)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @{
+                                string horaInicioFormateada = Model.HoraInicio.ToString("hh:mm tt");
+                            }
+                            @Html.DisplayFor(model => horaInicioFormateada)
+                        </dd>
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.HoraFin)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @{
+                                string horaFinFormateada = Model.HoraFin.ToString("hh:mm tt");
+                            }
+                            @Html.DisplayFor(model => horaFinFormateada)
+                        </dd>
+
+                    </dl>
+                </div>
+
+                <div class="row justify-content-end">
+                    <div class="col-md-auto">
+                        <a class="nav-link text-black" asp-action="IndexMedico" asp-controller="Cita">Ir a Mis Citas</a>
+                    </div>
+                    <div class="col-md-auto">
+                        @Html.ActionLink("Editar", "Edit", new { IdHorario = Model.IdHorario }, new{@class="nav-link text-white btn btn-primary"})
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+

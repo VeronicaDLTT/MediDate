@@ -85,5 +85,64 @@ namespace MediDate.Controllers
             }
             
         }
+
+        public IActionResult Edit(int IdConsultorio)
+        {
+            //Buscamos el Consultorio por su Id
+            var consultorio = _database.Consultorios.GetById(IdConsultorio);
+
+            if (consultorio == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return View(consultorio);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Consultorio consultorio)
+        {
+            //Actualizamos el Horario
+            var result = _database.Consultorios.Edit(consultorio);
+
+            if (!result.Success)
+            {
+
+                TempData["AlertMessage"] = "Error al modificar la información del Consultorio. Intente de nuevo. ";
+                return View(consultorio);
+            }
+
+            TempData["SuccessMessage"] = result.Message;
+            return RedirectToAction("Details", "Consultorio");
+        }
+
+        public IActionResult Details()
+        {
+            if (Request.Cookies.TryGetValue("IdMedico", out string strMedico))
+            {
+                int IdMedico = Int32.Parse(strMedico);
+
+                //Buscamos el Consultorio por IdMedico
+                var consultorio = _database.Consultorios.GetByIdMedico(IdMedico);
+
+                if (consultorio == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return View(consultorio);
+                }
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "No se pudo cargar la información del Consultorio. ";
+                return RedirectToAction("IndexMedico", "Cita");
+            }
+
+        }
     }
 }

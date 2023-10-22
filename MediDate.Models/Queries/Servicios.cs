@@ -63,5 +63,16 @@ namespace MediDate.Models.Queries
 
             return servicios;
         }
+
+        public BaseResult Edit(Servicio servicio)
+        {
+
+            using (var db = GetConnection())
+            {
+                return db.QueryFirstOrDefault<BaseResult>(
+                    "sp_servicios 3,@IdServicio,@Descripcion",
+                    new { servicio.IdServicio, servicio.Descripcion });
+            }
+        }
     }
 }

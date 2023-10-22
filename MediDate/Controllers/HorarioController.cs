@@ -56,6 +56,64 @@ namespace MediDate.Controllers
 
         }
 
+        public IActionResult Edit(int IdHorario)
+        {
+            //Buscamos el Horario por su Id
+            var horario = _database.Horarios.GetById(IdHorario);
+
+            if (horario == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return View(horario);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Horario horario)
+        {
+            //Actualizamos el Horario
+            var result = _database.Horarios.Edit(horario);
+
+            if (!result.Success)
+            {
+
+                TempData["AlertMessage"] = "Error al modificar el horario. Intente de nuevo. ";
+                return View(horario);
+            }
+
+            TempData["SuccessMessage"] = result.Message;
+            return RedirectToAction("Details", "Horario");
+        }
+
+        public IActionResult Details()
+        {
+            if (Request.Cookies.TryGetValue("IdMedico", out string strMedico))
+            {
+                int IdMedico = Int32.Parse(strMedico);
+                
+                //Buscamos el horario por IdMedico
+                var horario = _database.Horarios.GetByIdMedico(IdMedico);
+
+                if (horario == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return View(horario);
+                }
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "No se pudo cargar el horario de atención. ";
+                return RedirectToAction("IndexMedico", "Cita");
+            }
+
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

@@ -1,0 +1,50 @@
+﻿@model MediDate.Models.DetServicio
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<partial name="_MenuMedicos" />
+
+<div class="row justify-content-center">
+    <div class="col-md-auto align-self-center">
+        <h1>Editar Servicio</h1>
+    </div>
+</div>
+
+<div><label></label></div>
+
+<div class="row justify-content-center">
+    <div class="col-md-4 align-self-center">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="IdDetServicio" class="form-control" type="hidden"/>
+                <input asp-for="IdServicio" class="form-control" type="hidden"/>
+            </div>
+            <div><label></label></div>
+            <div class="form-group">
+                <label asp-for="Servicio" class="control-label"><b>Servicio</b></label>
+                <input asp-for="Servicio" class="form-control" />
+                <span asp-validation-for="Servicio" class="text-danger"></span>
+            </div>
+            <div><label></label></div>
+            <div class="form-group">
+                <label asp-for="Costo" class="control-label"><b>Costo</b></label>
+                <input asp-for="Costo" class="form-control" />
+                <span asp-validation-for="Costo" class="text-danger"></span>
+            </div>
+            <div><label></label></div>
+            <div class="row justify-content-end">
+                <div class="col-md-auto">
+                    <a class="nav-link text-black" asp-action="Index" asp-controller="DetServicio">Regresar</a>
+                </div>
+                <div class="col-md-auto">
+                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+

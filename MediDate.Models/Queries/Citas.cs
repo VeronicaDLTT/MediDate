@@ -66,5 +66,27 @@ namespace MediDate.Models.Queries
                     new {cita.IdMedico, cita.IdPaciente, cita.IdDetServicio, cita.Fecha, cita.Hora, cita.Estado });
             }
         }
+
+        public BaseResult Verificar(Cita cita)
+        {
+
+            using (var db = GetConnection())
+            {
+                return db.QueryFirstOrDefault<BaseResult>(
+                    "sp_citas 8,'',@IdMedico,@IdPaciente,'',@Fecha,@Hora,''",
+                    new { cita.IdMedico, cita.IdPaciente, cita.Fecha, cita.Hora});
+            }
+        }
+
+        public BaseResult Edit(Cita cita)
+        {
+
+            using (var db = GetConnection())
+            {
+                return db.QueryFirstOrDefault<BaseResult>(
+                    "sp_citas 3,@IdCita,'','','',@Fecha,@Hora,''",
+                    new { cita.IdCita, cita.Fecha, cita.Hora });
+            }
+        }
     }
 }

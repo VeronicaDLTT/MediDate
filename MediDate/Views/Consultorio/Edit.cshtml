@@ -1,0 +1,71 @@
+﻿@model MediDate.Models.Consultorio
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+@if (TempData["AlertMessage"] != null)
+{
+    <!--Modal si ocurre una excepción-->
+    <script>
+        window.onload = function () {
+            Swal.fire('Aviso', '@TempData["AlertMessage"]', 'info');
+        }
+    </script>
+}
+
+<partial name="_MenuMedicos" />
+
+<div class="row justify-content-center">
+    <div class="col-md-auto align-self-center">
+        <h1>Editar información del Consultorio <h1>
+    </div>
+</div>
+
+<div><label></label></div>
+
+<div class="row justify-content-center">
+    <div class="col-md-4 align-self-center">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="IdConsultorio" class="form-control" type="hidden"/>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Descripcion" class="control-label"></label>
+                <input asp-for="Descripcion" class="form-control" />
+                <span asp-validation-for="Descripcion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Calle" class="control-label"></label>
+                <input asp-for="Calle" class="form-control" />
+                <span asp-validation-for="Calle" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Colonia" class="control-label"></label>
+                <input asp-for="Colonia" class="form-control" />
+                <span asp-validation-for="Colonia" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumExterior" class="control-label"></label>
+                <input asp-for="NumExterior" class="form-control" />
+                <span asp-validation-for="NumExterior" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CodigoPostal" class="control-label"></label>
+                <input asp-for="CodigoPostal" class="form-control" pattern="[0-9]{5}" />
+                <span asp-validation-for="CodigoPostal" class="text-danger"></span>
+            </div>
+            <div class="row justify-content-end">
+                <div class="col-md-auto">
+                    <a class="nav-link text-black" asp-action="Details" asp-controller="Consultorio">Regresar</a>
+                </div>
+                <div class="col-md-auto">
+                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

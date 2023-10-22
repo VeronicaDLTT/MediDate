@@ -60,7 +60,7 @@
                                 </td>
                                 <td>
                                     @{
-                                        string horaFormateada = item.Hora.ToString("HH:mm tt");
+                                        string horaFormateada = item.Hora.ToString("hh:mm tt");
                                     }
                                     @Html.DisplayFor(modelItem => horaFormateada)
                                 </td>
@@ -74,9 +74,8 @@
                                     @Html.DisplayFor(modelItem => item.DescEstado)
                                 </td>
                                 <td>
-                                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                                    @Html.ActionLink("Reagendar", "EditMedico", new { IdCita = item.IdCita}) |
+                                    @Html.ActionLink("Cancelar", "DeleteMedico", new { IdCita = item.IdCita})
                                 </td>
                             </tr>
                         }

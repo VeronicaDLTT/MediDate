@@ -28,20 +28,30 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             
             <div class="form-group">
-                <label asp-for="IdServicio" class="control-label">Servicio</label>
-                <input id="txtBuscar" name="txtBuscar" onkeyup="getDropdownData()" type="text" class="form-control" placeholder="Nombre, Apellido, Correo" autocomplete="off">
-                <ul id="ddBusqueda" style="display:none;"></ul>
+                <label asp-for="Servicio" class="control-label"><b>Servicio</b></label>
+                <p>Selecciona una opcion de la lista o escribe en el recuadro sino encuentras la opción en la lista.</p>
+                <input id="txtServicio" asp-for="Servicio" class="form-control" type="text" placeholder="Servicio"/>
+                <select id="ddServicio" class="form-control" asp-for="IdServicio">
+                    <option>-- Selecciona una opción --</option>
+                    @foreach (var option in ViewBag.Servicios)
+                    {
+                        <option value="@option.Value">@option.Text</option>
+                    }
+                </select>
+                @*<input id="txtBuscar" name="txtBuscar" onkeyup="getDropdownData()" type="text" class="form-control" placeholder="Nombre, Apellido, Correo" autocomplete="off">*@
+                @*<ul id="ddBusqueda" style="display:none;"></ul>*@
+
                 <span asp-validation-for="IdServicio" class="text-danger"></span>
             </div>
             <div><label></label></div>
             <div class="form-group">
-                <label asp-for="Costo" class="control-label"></label>
-                <input asp-for="Costo" class="form-control" />
+                <label asp-for="Costo" class="control-label"><b>Costo</b></label>
+                <input asp-for="Costo" class="form-control" placeholder="250"/>
                 <span asp-validation-for="Costo" class="text-danger"></span>
             </div>
             <div><label></label></div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Agregar" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -56,6 +66,7 @@
 </div> @*Fin Container de _MenuMedicos.cshtml*@
 
 <script>
+
 
     @*Mostrar lista desplegable para el buscador*@
     function getDropdownData() {

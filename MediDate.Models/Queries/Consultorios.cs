@@ -62,5 +62,15 @@ namespace MediDate.Models.Queries
                                                             new { consultorio.IdMedico, consultorio.Descripcion, consultorio.Calle, consultorio.Colonia, consultorio.NumExterior, consultorio.CodigoPostal });
             }
         }
+
+        public BaseResult Edit(Consultorio consultorio)
+        {
+
+            using (var db = GetConnection())
+            {
+                return db.QueryFirstOrDefault<BaseResult>("sp_consultorios 3,@IdConsultorio,'',@Descripcion,@Calle,@Colonia,@NumExterior,@CodigoPostal",
+                                                            new { consultorio.IdConsultorio, consultorio.Descripcion, consultorio.Calle, consultorio.Colonia, consultorio.NumExterior, consultorio.CodigoPostal });
+            }
+        }
     }
 }

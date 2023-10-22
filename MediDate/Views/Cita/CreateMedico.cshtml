@@ -4,6 +4,26 @@
     ViewData["Title"] = "CreateMedico";
 }
 
+@if (TempData["ErrorMessage"] != null)
+{
+    <!--Modal si ocurre una excepción-->
+    <script>
+        window.onload = function () {
+            Swal.fire('Aviso', '@TempData["ErrorMessage"]', 'error');
+        }
+    </script>
+}
+
+@if (TempData["AlertMessage"] != null)
+{
+    <!--Modal si ocurre una excepción-->
+    <script>
+        window.onload = function () {
+            Swal.fire('Aviso', '@TempData["AlertMessage"]', 'info');
+        }
+    </script>
+}
+
 <style>
     #ddBusqueda {
         position: absolute;
@@ -29,7 +49,7 @@
             <div class="form-group">
                 <label asp-for="NombrePaciente" class="control-label">Paciente</label>
                 
-                <input id="txtBuscar" name="txtBuscar" onkeyup="getDropdownData()" type="text" class="form-control" placeholder="Nombre, Apellido, Correo" autocomplete="off">
+                <input id="txtBuscar" name="txtBuscar" onkeyup="getDropdownData()" type="text" class="form-control" placeholder="Nombre, Apellido, Correo" autocomplete="off" required>
                 <ul id="ddBusqueda" style="display:none;" ></ul>
                 
                 <span asp-validation-for="NombrePaciente" class="text-danger"></span>
@@ -48,12 +68,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="Fecha" class="control-label"></label>
-                <input asp-for="Fecha" class="form-control" type="date" />
-                <span asp-validation-for="Fecha" class="text-danger"></span>
+                <input asp-for="Fecha" class="form-control" type="date" min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" value="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" required />
+                <span asp-validation-for="Fecha" class="text-danger" min=""></span>
             </div>
             <div class="form-group">
                 <label asp-for="Hora" class="control-label"></label>
-                <input asp-for="Hora" class="form-control" type="time" />
+                <input asp-for="Hora" class="form-control" type="time" min="@ViewBag.HoraInicio" max="@ViewBag.HoraFin" step="3600" value="@ViewBag.HoraInicio" required />
                 <span asp-validation-for="Hora" class="text-danger"></span>
             </div>
             <div class="form-group">

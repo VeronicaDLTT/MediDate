@@ -10,7 +10,7 @@ namespace MediDate.Models
     {
         public int IdDetServicio { get; set; }
         public int IdServicio { get; set; }
-        public string Servicio { get; set; }   
+        public string? Servicio { get; set; }   
         public int IdConsultorio { get; set; }
         public int IdMedico { get; set; }
         public double Costo { get; set; }
