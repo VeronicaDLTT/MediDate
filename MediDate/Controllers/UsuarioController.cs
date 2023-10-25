@@ -70,7 +70,13 @@ namespace MediDate.Controllers
                             }
                             else
                             {
-                                //Si si tiene un horario registrado le mostramos la vista de sus Citas
+                                //Si si tiene un horario registrado
+
+                                //Actualizamos todas las citas anteriores a la fecha actual que siguen
+                                //en Estado = 1 - En espera para cambiarlo a 3 = Pendiente
+                                var editCitas = _database.Citas.EditEstadoPendiente((int)resultUsuario.IdMedico);
+
+                                //le mostramos la vista de sus Citas
                                 return RedirectToAction("IndexMedico", "Cita");
                             }
                             

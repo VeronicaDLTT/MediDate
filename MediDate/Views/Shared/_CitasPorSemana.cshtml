@@ -1,0 +1,72 @@
+﻿@model IEnumerable<MediDate.Models.Cita>
+
+
+<div class="table-responsive">
+    @if (Model.Count() > 0)
+    {
+
+        <table class="table table-striped" id="tablaCitas">
+            <tr>
+                <th style="width:100px"></th>
+                <th id="dia1" style="width:100px">Dia 1</th>
+                <th id="dia2" style="width:100px">Dia 2</th>
+                <th id="dia3" style="width:100px">Dia 3</th>
+                <th id="dia4" style="width:100px">Dia 4</th>
+                <th id="dia5" style="width:100px">Dia 5</th>
+                <th id="dia6" style="width:100px">Dia 6</th>
+                <th id="dia7" style="width:100px">Dia 7</th>
+            </tr>
+
+        </table>
+
+    }
+    else
+    {
+        <div class="container" style="height:400px">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Sin Citas</h5>
+                    <p class="card-text">No hay citas programadas para la semana del @ViewBag.Fecha al @ViewBag.Fecha2.</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+        </div> @*Fin Col de _MenuMedicos.cshtml*@
+    </div> @* Fin Row de _MenuMedicos.cshtml*@
+</div> @*Fin Container de _MenuMedicos.cshtml*@
+
+<!-- Modal -->
+<div class="modal fade" id="detallesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Detalles de la cita</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Nombre del paciente:</strong> <span id="nombrePaciente"></span></p>
+                <p><strong>Servicio:</strong> <span id="servicio"></span></p>
+                <p><strong>Fecha y Hora:</strong> <span id="fechayhora"></span></p>
+            </div>
+            <div class="modal-footer">
+                <form id="finalizarForm" method="post" asp-controller="Cita" asp-action="EditEstado">
+                    <input type="hidden" id="idCitaFinalizar" name="IdCita" value="IdCitaDato" />
+                    <input type="hidden" name="Estado" value="2" />
+                    <button type="submit" class="btn" id="finalizarLink">Finalizar</button>
+                </form>
+
+                <form id="noPresentoForm" method="post" asp-controller="Cita" asp-action="EditEstado">
+                    <input type="hidden" id="idCitaNoPresento" name="IdCita" value="IdCitaDato" />
+                    <input type="hidden" name="Estado" value="4" />
+                    <button type="submit" class="btn" id="noPresentoLink">No se presentó</button>
+                </form>
+                <form asp-antiforgery="true"></form>
+                @Html.ActionLink("Reagendar", "EditMedico", new { IdCita = "IdCitaDato"}, new{@id="reagendar", @class="nav-link text-white btn btn-primary"}) |
+                @Html.ActionLink("Cancelar", "DeleteMedico", new { IdCita = "IdCitaDato"}, new{@id="cancelar", @class="nav-link text-white btn btn-danger"})
+            </div>
+        </div>
+    </div>
+</div>
+

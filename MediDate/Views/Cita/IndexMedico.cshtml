@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MediDate.Models.Cita>
+﻿@using System.Text.Json
 
 @{
     ViewData["Title"] = "Index";
@@ -17,82 +17,542 @@
 
 <partial name="_MenuMedicos" />
 
-        <h1>Mis Citas</h1>
+    <div class="container">
 
-        @*<p class="d-flex justify-content-end">*@
-        <p>
-            <a class="btn btn-primary" asp-controller="Cita" asp-action="CreateMedico">Agendar</a>
-        </p>
-
-        <div class="table-responsive">
-            @if(Model.Count()>0){
-                <table class="table">
-                    <thead>
-                        <tr>
-
-                            <th>
-                                @Html.DisplayNameFor(model => model.Fecha)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Hora)
-                            </th>
-                            <th>
-                                @Html.DisplayName("Paciente")
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Servicio)
-                            </th>
-                            <th>
-                                @Html.DisplayName("Estado")
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>
-                                    @{
-                                        string fechaFormateada = item.Fecha.ToString("dd/MM/yyyy");
-                                    }
-                                    @Html.DisplayFor(modelItem => fechaFormateada)
-                                </td>
-                                <td>
-                                    @{
-                                        string horaFormateada = item.Hora.ToString("hh:mm tt");
-                                    }
-                                    @Html.DisplayFor(modelItem => horaFormateada)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.NombrePaciente)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Servicio)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.DescEstado)
-                                </td>
-                                <td>
-                                    @Html.ActionLink("Reagendar", "EditMedico", new { IdCita = item.IdCita}) |
-                                    @Html.ActionLink("Cancelar", "DeleteMedico", new { IdCita = item.IdCita})
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            }else{
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">Sin Citas</h5>
-                        <p class="card-text">No hay citas programadas por el momento.</p>
-                    </div>
-                </div>
-            }
+        <div class="row justify-content-center">
+            <div class="col-md-auto align-self-center">
+                <h1>Mis Citas</h1>
+            </div>
         </div>
 
-        </div> @*Fin Col de _MenuMedicos.cshtml*@
-    </div> @* Fin Row de _MenuMedicos.cshtml*@
-</div> @*Fin Container de _MenuMedicos.cshtml*@
+        <div><label></label></div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-auto align-self-center">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="porDia" id="porDia">
+                    <label class="form-check-label" for="porDia">
+                        Por día
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-auto align-self-center">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="porSemana" id="porSemana">
+                    <label class="form-check-label" for="porSemana">
+                        Por semana
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-auto align-self-center">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="todas" id="todas">
+                    <label class="form-check-label" for="todas">
+                        Todas las citas
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div><label></label></div>
+
+        <div class="row">
+            <div class="col-md-8 align-self-center">
+                <div id="formFechaBusqueda" style="display:none">
+                    <div class="row">
+                        <div class="col-md-8 align-self-center">
+                            <label><strong>Especifica la fecha para tu búsqueda</strong></label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8 align-self-center">
+                            <input id="datePorDia" onchange="obtenerDatosPorDia()" class="form-control" type="date" />
+                        </div>
+                    </div>
+                </div>
+
+                <div id="formFechaRangoBusqueda" style="display:none">
+                    <div class="row">
+                        <div class="col-md-8 align-self-center">
+                            <label><strong>Selecciona una semana</strong></label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8 align-self-center">
+                            <input type="week" id="inputFecha" onchange="obtenerDatosPorSemana()" class="form-control">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 align-self-center">
+                <p style="text-align: right;">
+                    <a class="btn btn-primary" asp-controller="Cita" asp-action="CreateMedico">Agendar</a>
+                </p>
+            </div>
+        </div>
+
+        <div><label></label></div>
+
+        <div id="citasContainer">
+            <!-- Aquí se mostrarán las citas -->
+        </div>
+    </div>
+
+ <script>
+
+    //Radio botones
+    var porDia = document.getElementById("porDia");
+    var porSemana = document.getElementById("porSemana");
+    var todas = document.getElementById("todas");
+
+    //Selectores de fecha
+    var datePorDia = document.getElementById("datePorDia"); //Por dia
+    var weekInput = document.getElementById("inputFecha"); //Por semana
+
+    //Formularios de fechas
+    var formFechaBusqueda = document.getElementById("formFechaBusqueda");
+    var formFechaRangoBusqueda = document.getElementById("formFechaRangoBusqueda");
+
+    //Cuando se selecciona el radio boton de porDia
+    porDia.checked = true;
+    obtenerDatosPorDia();
+
+    porDia.addEventListener("change", function(){
+        if(porDia.checked){
+
+            obtenerDatosPorDia();
+
+            //Borramos el valor de fecha en datePorDia
+            datePorDia.value = "";
+           
+            formFechaBusqueda.style.display = "block";
+            formFechaRangoBusqueda.style.display = "none";
+
+            porSemana.checked = false;
+            todas.checked = false;
+        }else{
+            formFechaBusqueda.style.display = "none";
+            porDia.checked = false;
+            
+        }
+    });
+
+    porSemana.addEventListener("change", function(){
+        if(porSemana.checked){
+
+            weekInput.value = "";
+            
+            obtenerDatosPorSemana();
+
+            formFechaRangoBusqueda.style.display = "block";
+            formFechaBusqueda.style.display = "none";
+            porDia.checked = false;
+            todas.checked = false;
+        }else{
+            porSemana.checked = false;
+        }
+    });
+
+    todas.addEventListener("change", function () {
+        if (todas.checked) {
+            fetch("/Cita/ObtenerCitas?opcion=todas")
+            .then(response => response.text())
+            .then(data => {
+                // Actualizar el contenido en el contenedor de citas
+                document.getElementById("citasContainer").innerHTML = data;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+            formFechaRangoBusqueda.style.display = "none";
+            formFechaBusqueda.style.display = "none";
+            porDia.checked = false;
+            porSemana.checked = false;
+        } else {
+            todas.checked = false;
+        }
+    });
+
+    function cargarScriptCitasPorSemana() {
+
+        var table = document.getElementById("tablaCitas");
+
+        // Obtener la fecha actual
+        let currentDate = new Date();
+        let days = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+
+        if(weekInput.value != ""){
+            const weekValue = weekInput.value;
+
+            // Divide el valor del input en año y número de semana
+            const [year, weekNumber] = weekValue.split('-W').map(Number);
+
+            // Calcula la fecha del primer día de la semana (lunes)
+            const weekStart = new Date(year, 0, 2 + (weekNumber - 1) * 7);
+
+            currentDate = weekStart;
+        }
+
+        // Iterar para mostrar los próximos 7 días y agregar las filas de días y números
+        for (let i = 0; i < 7; i++) {
+
+            // Obtener el nombre del día
+            let day = days[currentDate.getDay()];
+
+            // Construir el identificador dinámico para el elemento
+            var id = "dia" + (i + 1);
+
+            // Obtener el elemento por su ID
+            var elemento = document.getElementById(id);
+
+            // Establecer el contenido de las celdas
+            elemento.textContent = day + " " + currentDate.getDate();
+
+            // Avanzar al siguiente día
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+
+        //Obtener la hora de inicio y la hora de finalización desde ViewBag
+        var horaInicioStr = "@ViewBag.HoraInicio";
+        var horaFinStr = "@ViewBag.HoraFin";
+
+        // Intentar convertir las cadenas en objetos Date
+        var horaInicio = new Date(horaInicioStr);
+        var horaFin = new Date(horaFinStr);
+
+        // Obtener la hora actual
+        let currentHour = horaInicio;
+
+        // Iterar para agregar filas con horas
+        while (currentHour <= horaFin) {
+            // Agregar una nueva fila a la tabla
+            var newRow = table.insertRow(table.rows.length);
+
+            for (var i = 0; i < 8; i++) {
+                if (i == 0) {
+                    // Crear la primera celda con la hora
+                    var newCellHora = newRow.insertCell(i);
+                    newCellHora.style.textAlign = "center"; // Alinea el texto al centro
+                    newCellHora.innerHTML = currentHour.getHours() + ":" + (currentHour.getMinutes() < 10 ? '0' : '') + currentHour.getMinutes();
+
+                    // Avanzar a la siguiente hora
+                    currentHour.setMinutes(currentHour.getMinutes() + 60); // Cambiar el 30 según el intervalo deseado
+                } else {
+                    // Crear las demas celdas
+                    var newCellHora = newRow.insertCell(i);
+                }
+            }
+        }
+
+        var datos = @Html.Raw(JsonSerializer.Serialize(Model));
+        //Recorremos la tabla para agregar los datos de las citas en donde corresponda
+        var numFilas = table.rows.length;
+        var numColumnas = table.rows[0].cells.length;
+
+        datos.forEach(function (item) {
+            var fecha = new Date(item.Fecha);
+            var dia = days[fecha.getDay()] + " " + fecha.getDate();
+            var hora = new Date(item.Hora);
+            var horaCita = hora.getHours() + ":" + (hora.getMinutes() < 10 ? '0' : '') + hora.getMinutes();
+
+            for (var i = 1; i < numFilas; i++) {
+                for (var j = 1; j < numColumnas; j++) {
+
+                    var datoColumna = table.rows[0].cells[j].textContent;
+                    var datoFila = table.rows[i].cells[0].textContent;
+
+                    if ((datoColumna == dia) && (datoFila == horaCita) && (item.Estado == 1)) {
+                        // Seleccionar la celda específica
+                        var celda = table.rows[i].cells[j];
+
+                        // Crear el enlace y establecer el texto
+                        var link = document.createElement("a");
+                        link.classList.add("nav-link", "text-black");
+                        link.setAttribute("data-bs-toggle", "modal");
+                        link.setAttribute("data-bs-target", "#detallesModal");
+                        link.setAttribute("data-nombre", item.NombrePaciente);
+                        link.setAttribute("data-servicio", item.Servicio);
+                        link.setAttribute("data-fechayhora", fecha.getDate() + "/" + fecha.getMonth() + "/" + fecha.getFullYear() + " - " + horaCita);
+                        link.setAttribute("data-idcita", item.IdCita);
+                        link.style.cursor = "pointer";
+
+                        link.innerHTML = item.NombrePaciente + "<br>" + item.Servicio;
+
+                        // Agregar el enlace a la celda
+                        celda.appendChild(link);
+                        celda.classList.add("table-info");
+                    }
+
+                }
+            }
+        });
+
+        // Obtén todos los enlaces creados dinámicamente
+        var enlaces = document.querySelectorAll("a[data-bs-toggle='modal'][data-bs-target='#detallesModal']");
+
+        enlaces.forEach(function (enlace) {
+            enlace.addEventListener("click", function (e) {
+                // Evita que el enlace abra su URL
+                e.preventDefault();
+
+                // Obtiene la información de la cita correspondiente desde el atributo de datos del enlace
+                var nombrePaciente = enlace.getAttribute("data-nombre");
+                var servicio = enlace.getAttribute("data-servicio");
+                var fechayhora = enlace.getAttribute("data-fechayhora");
+                var idcita = enlace.getAttribute("data-idcita");
+
+                // Actualiza el contenido del modal con los detalles de la cita
+                document.getElementById("nombrePaciente").textContent = nombrePaciente;
+                document.getElementById("servicio").textContent = servicio;
+                document.getElementById("fechayhora").textContent = fechayhora;
+
+                document.querySelector("#finalizarLink").addEventListener("click", function () {
+
+                    // Actualiza el valor del campo oculto en el formulario de "Finalizar"
+                    document.querySelector("#idCitaFinalizar").value = idcita;
+
+                    // Envía el formulario
+                    document.querySelector("#finalizarForm").submit();
+                });
+
+                document.querySelector("#noPresentoLink").addEventListener("click", function () {
+
+                    // Actualiza el valor del campo oculto en el formulario de "No se presentó"
+                    document.querySelector("#idCitaNoPresento").value = idcita;
+
+                    // Envía el formulario
+                    document.querySelector("#noPresentoForm").submit();
+                });
+
+                var reagendarLink = document.querySelector("#reagendar");
+                var cancelarLink = document.querySelector("#cancelar");
+                //var finalizarLink = document.querySelector("#finalizarLink");
+                //var noPresentoLink = document.querySelector("#noPresentoLink");
+
+
+                //finalizarLink.href = "@Url.Action("EditEstado", new { Estado = 2, IdCita = "IdCitaDato"})".replace("IdCitaDato",idcita);
+                //noPresentoLink.href = "@Url.Action("EditEstado", new { Estado = 4, IdCita = "IdCitaDato"})".replace("IdCitaDato",idcita);
+                reagendarLink.href = "@Url.Action("EditMedico", new { IdCita = "IdCitaDato" })".replace("IdCitaDato", idcita);
+                cancelarLink.href = "@Url.Action("DeleteMedico", new { IdCita = "IdCitaDato" })".replace("IdCitaDato", idcita);
+            });
+        });
+
+    }
+
+    function cargarScriptCitasPorDia(opcion) {
+
+        var table = document.getElementById("tablaCitas");
+
+        let currentDate;
+       
+        // Obtener la fecha que se quiere buscar
+        if((opcion == 1) || (datePorDia.value == "")){
+            currentDate = new Date();
+        }else{
+            let parts = datePorDia.value.split("-"); // Suponiendo que la fecha está en formato 'YYYY-MM-DD'
+            let year = parts[0];
+            let month = parts[1] - 1; // Restar 1 al mes, ya que en JavaScript los meses son de 0 a 11
+            let day = parts[2];
+            currentDate = new Date(year, month, day);
+        }
+
+        let days = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+
+        // Obtener el nombre del día
+        let day = days[currentDate.getDay()];
+
+        // Obtener el elemento por su ID
+        var elemento = document.getElementById("dia1");
+
+        // Establecer el contenido de las celdas
+        elemento.textContent = day + " " + currentDate.getDate();
+
+        //Obtener la hora de inicio y la hora de finalización desde ViewBag
+        var horaInicioStr = "@ViewBag.HoraInicio";
+        var horaFinStr = "@ViewBag.HoraFin";
+
+        // Intentar convertir las cadenas en objetos Date
+        var horaInicio = new Date(horaInicioStr);
+        var horaFin = new Date(horaFinStr);
+
+        // Obtener la hora actual
+        let currentHour = horaInicio;
+
+        // Iterar para agregar filas con horas
+        while (currentHour <= horaFin) {
+            // Agregar una nueva fila a la tabla
+            var newRow = table.insertRow(table.rows.length);
+
+            for (var i = 0; i < 2; i++) {
+                if (i == 0) {
+                    // Crear la primera celda con la hora
+                    var newCellHora = newRow.insertCell(i);
+                    newCellHora.style.textAlign = "center"; // Alinea el texto al centro
+                    newCellHora.innerHTML = currentHour.getHours() + ":" + (currentHour.getMinutes() < 10 ? '0' : '') + currentHour.getMinutes();
+
+                    // Avanzar a la siguiente hora
+                    currentHour.setMinutes(currentHour.getMinutes() + 60); // Cambiar el 30 según el intervalo deseado
+                } else {
+                    // Crear las demas celdas
+                    var newCellHora = newRow.insertCell(i);
+                }
+            }
+        }
+
+        var datos = @Html.Raw(JsonSerializer.Serialize(Model));
+        //Recorremos la tabla para agregar los datos de las citas en donde corresponda
+        var numFilas = table.rows.length;
+        var numColumnas = table.rows[0].cells.length;
+
+        datos.forEach(function (item) {
+            var fecha = new Date(item.Fecha);
+            var dia = days[fecha.getDay()] + " " + fecha.getDate();
+            var hora = new Date(item.Hora);
+            var horaCita = hora.getHours() + ":" + (hora.getMinutes() < 10 ? '0' : '') + hora.getMinutes();
+
+            for (var i = 1; i < numFilas; i++) {
+                for (var j = 1; j < numColumnas; j++) {
+
+                    var datoColumna = table.rows[0].cells[j].textContent;
+                    var datoFila = table.rows[i].cells[0].textContent;
+
+                    if ((datoColumna == dia) && (datoFila == horaCita) && (item.Estado == 1)) {
+                        // Seleccionar la celda específica
+                        var celda = table.rows[i].cells[j];
+
+                        // Crear el enlace y establecer el texto
+                        var link = document.createElement("a");
+                        link.classList.add("nav-link", "text-black");
+                        link.setAttribute("data-bs-toggle", "modal");
+                        link.setAttribute("data-bs-target", "#detallesModal");
+                        link.setAttribute("data-nombre", item.NombrePaciente);
+                        link.setAttribute("data-servicio", item.Servicio);
+                        link.setAttribute("data-fechayhora", fecha.getDate() + "/" + fecha.getMonth() + "/" + fecha.getFullYear() + " - " + horaCita);
+                        link.setAttribute("data-idcita", item.IdCita);
+                        link.style.cursor = "pointer";
+
+                        link.innerHTML = item.NombrePaciente + "<br>" + item.Servicio;
+
+                        // Agregar el enlace a la celda
+                        celda.appendChild(link);
+                        celda.classList.add("table-info");
+                    }
+
+                }
+            }
+        });
+
+        // Obtén todos los enlaces creados dinámicamente
+        var enlaces = document.querySelectorAll("a[data-bs-toggle='modal'][data-bs-target='#detallesModal']");
+
+        enlaces.forEach(function (enlace) {
+            enlace.addEventListener("click", function (e) {
+                // Evita que el enlace abra su URL
+                e.preventDefault();
+
+                // Obtiene la información de la cita correspondiente desde el atributo de datos del enlace
+                var nombrePaciente = enlace.getAttribute("data-nombre");
+                var servicio = enlace.getAttribute("data-servicio");
+                var fechayhora = enlace.getAttribute("data-fechayhora");
+                var idcita = enlace.getAttribute("data-idcita");
+
+                // Actualiza el contenido del modal con los detalles de la cita
+                document.getElementById("nombrePaciente").textContent = nombrePaciente;
+                document.getElementById("servicio").textContent = servicio;
+                document.getElementById("fechayhora").textContent = fechayhora;
+
+                document.querySelector("#finalizarLink").addEventListener("click", function () {
+
+                    // Actualiza el valor del campo oculto en el formulario de "Finalizar"
+                    document.querySelector("#idCitaFinalizar").value = idcita;
+
+                    // Envía el formulario
+                    document.querySelector("#finalizarForm").submit();
+                });
+
+                document.querySelector("#noPresentoLink").addEventListener("click", function () {
+
+                    // Actualiza el valor del campo oculto en el formulario de "No se presentó"
+                    document.querySelector("#idCitaNoPresento").value = idcita;
+
+                    // Envía el formulario
+                    document.querySelector("#noPresentoForm").submit();
+                });
+
+                var reagendarLink = document.querySelector("#reagendar");
+                var cancelarLink = document.querySelector("#cancelar");
+                //var finalizarLink = document.querySelector("#finalizarLink");
+                //var noPresentoLink = document.querySelector("#noPresentoLink");
+
+
+                //finalizarLink.href = "@Url.Action("EditEstado", new { Estado = 2, IdCita = "IdCitaDato"})".replace("IdCitaDato",idcita);
+                //noPresentoLink.href = "@Url.Action("EditEstado", new { Estado = 4, IdCita = "IdCitaDato"})".replace("IdCitaDato",idcita);
+                reagendarLink.href = "@Url.Action("EditMedico", new { IdCita = "IdCitaDato" })".replace("IdCitaDato", idcita);
+                cancelarLink.href = "@Url.Action("DeleteMedico", new { IdCita = "IdCitaDato" })".replace("IdCitaDato", idcita);
+            });
+        });
+
+    }
+
+    function obtenerDatosPorDia(){
+        
+        // Obtén el valor del input
+        var valorInput;
+
+        valorInput = datePorDia.value;
+
+        if(valorInput == ""){
+            formFechaBusqueda.style.display = "block";
+            formFechaRangoBusqueda.style.display = "none";
+        }
+        
+        fetch("/Cita/ObtenerCitas?opcion=porDia&fecha1=" + valorInput)
+            .then(response => response.text())
+            .then(data => {
+                // Actualizar el contenido en el contenedor de citas
+                document.getElementById("citasContainer").innerHTML = data;
+                cargarScriptCitasPorDia(0);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    function obtenerDatosPorSemana() {
+
+        const weekValue = weekInput.value;
+
+        // Divide el valor del input en año y número de semana
+        const [year, weekNumber] = weekValue.split('-W').map(Number);
+
+        // Calcula la fecha del primer día de la semana (lunes)
+        const weekStart = new Date(year, 0, 2 + (weekNumber - 1) * 7);
+
+        // Calcula la fecha del último día de la semana (domingo)
+        const weekEnd = new Date(year, 0, 2 + (weekNumber - 1) * 7 + 6);
+
+        // Puedes formatear estas fechas como desees y mostrarlas
+        const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        // Formatea estas fechas como "MM/dd/yyyy"
+        const formattedWeekStart = (weekStart.getMonth() + 1).toString().padStart(2, '0') + "/" + weekStart.getDate().toString().padStart(2, '0') + "/" + weekStart.getFullYear();
+        const formattedWeekEnd = (weekEnd.getMonth() + 1).toString().padStart(2, '0') + "/" + weekEnd.getDate().toString().padStart(2, '0') + "/" + weekEnd.getFullYear();
+
+        fetch("/Cita/ObtenerCitas?opcion=porSemana&fecha1=" + formattedWeekStart + "&fecha2=" + formattedWeekEnd)
+            .then(response => response.text())
+            .then(data => {
+                // Actualizar el contenido en el contenedor de citas
+                document.getElementById("citasContainer").innerHTML = data;
+                cargarScriptCitasPorSemana();
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+ </script>       
 
 

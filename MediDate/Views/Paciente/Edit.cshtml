@@ -16,34 +16,38 @@
 
 <partial name="_MenuPacientes" />
 
-<h1>Editar Cuenta</h1>
+<div class="row justify-content-center">
+    <div class="col-md-auto align-self-center">
+        <h1>Editar Cuenta</h1>
+    </div>
+</div>
 
 <div><label></label></div>
 
-<div class="row">
-    <div class="col-md-4">
+<div class="row justify-content-center">
+    <div class="col-md-4 align-self-center">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
+                <label asp-for="Nombre" class="control-label"><b>Nombre</b></label>
                 <input asp-for="Nombre" class="form-control" required/>
                 <span asp-validation-for="Nombre" class="text-danger"></span>
             </div>
             <div><label></label></div>
             <div class="form-group">
-                <label asp-for="Apellido" class="control-label"></label>
+                <label asp-for="Apellido" class="control-label"><b>Apellido</b></label>
                 <input asp-for="Apellido" class="form-control" required/>
                 <span asp-validation-for="Apellido" class="text-danger"></span>
             </div>
             <div><label></label></div>
             <div class="form-group">
-                <label asp-for="FechaNacimiento" class="control-label">Fecha de Nacimiento</label>
+                <label asp-for="FechaNacimiento" class="control-label"><b>Fecha de Nacimiento</b></label>
                 <input asp-for="FechaNacimiento" class="form-control" type="date" format="dd/MM/yyyy"/>
                 <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
             </div>
             <div><label></label></div>
             <div class="form-group">
-                <label asp-for="Telefono" class="control-label">Número de Celular</label>
+                <label asp-for="Telefono" class="control-label"><b>Número de Celular</b></label>
                 <input asp-for="Telefono" class="form-control" />
                 <span asp-validation-for="Telefono" class="text-danger"></span>
             </div>
@@ -51,7 +55,7 @@
             <div class="form-group">
                 <div class="row d-flex justify-content-end">
                     <div class="col-md-auto">
-                        <a class="link-dark" asp-controller="Paciente" asp-action="Details">Regresar</a>
+                        <a class="nav-link text-black" asp-controller="Paciente" asp-action="Details">Regresar</a>
                     </div>
                     <div class="col-md-auto">
                         <input type="submit" value="Guardar" class="btn btn-primary" />

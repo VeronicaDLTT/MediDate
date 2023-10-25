@@ -15,13 +15,37 @@ namespace MediDate.Models.Queries
         /// Mostrar todas las Citas en estado de Espera de la tabla Citas por cada Medico
         /// </summary>
         /// <returns>Lista de Citas</returns>
-        public List<Cita> GetAllByMedico(int IdMedico)
+        public List<Cita> GetAllByMedicoSemana(int IdMedico, DateTime fecha1, DateTime fecha2)
         {
             var citas = new List<Cita>();
 
             using(var db = GetConnection())
             {
-                citas = db.Query<Cita>("sp_citas 5,'',@IdMedico", new {IdMedico}).ToList();
+                citas = db.Query<Cita>("sp_citas 5,'',@IdMedico,'','','','','',@Fecha1,@Fecha2", new {IdMedico, fecha1, fecha2}).ToList();
+            }
+
+            return citas;
+        }
+
+        public List<Cita> GetAllByMedicoDia(int IdMedico, DateTime Fecha1)
+        {
+            var citas = new List<Cita>();
+
+            using (var db = GetConnection())
+            {
+                citas = db.Query<Cita>("sp_citas 10,'',@IdMedico,'','','','','',@Fecha1", new { IdMedico, Fecha1 }).ToList();
+            }
+
+            return citas;
+        }
+
+        public List<Cita> GetAllByMedico(int IdMedico)
+        {
+            var citas = new List<Cita>();
+
+            using (var db = GetConnection())
+            {
+                citas = db.Query<Cita>("sp_citas 9,'',@IdMedico", new { IdMedico }).ToList();
             }
 
             return citas;
@@ -84,8 +108,29 @@ namespace MediDate.Models.Queries
             using (var db = GetConnection())
             {
                 return db.QueryFirstOrDefault<BaseResult>(
-                    "sp_citas 3,@IdCita,'','','',@Fecha,@Hora,''",
-                    new { cita.IdCita, cita.Fecha, cita.Hora });
+                    "sp_citas 3,@IdCita,'','','',@Fecha,@Hora,@Estado",
+                    new { cita.IdCita, cita.Fecha, cita.Hora, cita.Estado });
+            }
+        }
+
+        public BaseResult EditEstado(int IdCita, int Estado)
+        {
+
+            using (var db = GetConnection())
+            {
+                return db.QueryFirstOrDefault<BaseResult>(
+                    "sp_citas 7,@IdCita,'','','','','',@Estado",
+                    new {IdCita, Estado });
+            }
+        }
+
+        public BaseResult EditEstadoPendiente(int IdMedico)
+        {
+
+            using (var db = GetConnection())
+            {
+                return db.QueryFirstOrDefault<BaseResult>(
+                    "sp_citas 11, '', @IdMedico", new { IdMedico });
             }
         }
     }

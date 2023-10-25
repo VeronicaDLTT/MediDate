@@ -23,6 +23,16 @@
     </script>
 }
 
+@if (TempData["AlertMessage"] != null)
+{
+    <!--Modal si ocurre una excepción-->
+    <script>
+        window.onload = function () {
+            Swal.fire('Aviso', '@TempData["AlertMessage"]', 'info');
+        }
+    </script>
+}
+
         <partial name="_MenuPacientes" />
 
         <h1>Bienvenido a MediDate</h1>

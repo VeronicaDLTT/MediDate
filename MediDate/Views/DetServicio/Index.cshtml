@@ -15,12 +15,31 @@
     </script>
 }
 
+@if (TempData["AlertMessage"] != null)
+{
+
+    <!--Servicio registrado exitosamente-->
+    <script>
+        window.onload = function () {
+            Swal.fire('Aviso', '@TempData["AlertMessage"]', 'info');
+        }
+    </script>
+}
+
 <partial name="_MenuMedicos" />
 
-    <h1>Servicios</h1>
+<div class="container">
 
-    <p>
-        <a class="btn btn-primary" asp-controller="DetServicio" asp-action="Create">Agregar</a>
+    <div><label></label></div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-auto align-self-center">
+            <h1>Servicios</h1>
+        </div>
+    </div>
+
+    <p style="text-align: right;">
+        <a style="width:120px" class="btn btn-primary" asp-controller="DetServicio" asp-action="Create">Agregar</a>
     </p>
 
     <div class="table-responsive">
@@ -44,17 +63,17 @@
                     {
                         <tr>
 
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Servicio)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Costo)
-                                </td>
-                                <td>
-                                    @Html.ActionLink("Editar", "Edit", new { IdDetServicio = item.IdDetServicio }) |
-                                    @Html.ActionLink("Eliminar", "Delete", new { IdDetServicio = item.IdDetServicio })
-                                </td>
-                            </tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Servicio)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Costo)
+                            </td>
+                            <td>
+                            @Html.ActionLink("Editar", "Edit", new { IdDetServicio = item.IdDetServicio }, new{@class="nav-link text-white btn btn-primary", @style="width:120px; display: inline-block; margin-right: 10px;"})
+                            @Html.ActionLink("Eliminar", "Delete", new { IdDetServicio = item.IdDetServicio }, new{@class="nav-link text-white btn btn-danger", @style="width:120px; display: inline-block;"})
+                            </td>
+                        </tr>
                     }
                 </tbody>
             </table>
@@ -66,6 +85,7 @@
             </div>
         }
     </div>
+</div>
 
         </div> @*Fin Col de _MenuMedicos.cshtml*@
     </div> @* Fin Row de _MenuMedicos.cshtml*@

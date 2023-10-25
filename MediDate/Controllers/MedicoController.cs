@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Emit;
+using System.Web.Helpers;
 
 namespace MediDate.Controllers
 {
@@ -23,7 +24,17 @@ namespace MediDate.Controllers
 
         public IActionResult Index()
         {
-           return View();
+            try
+            {
+                return View();
+
+            }
+            catch (Exception e)
+            {
+                TempData["ErrorMessage"] = "No fue posible Iniciar Sesión. " + e.Message;
+                return RedirectToAction("Index", "Home");
+            }
+            
         }
 
         public IActionResult Create()

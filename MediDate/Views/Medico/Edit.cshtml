@@ -16,46 +16,52 @@
 
 <partial name="_MenuMedicos" />
 
-<h1>Editar Cuenta</h1>
+<div class="container">
+
+<div class="row justify-content-center">
+    <div class="col-md-auto align-self-center">
+        <h1>Editar Cuenta</h1>
+    </div>
+</div>
 
 <div><label></label></div>
 
-<div class="row">
-    <div class="col-md-4">
+<div class="row justify-content-center">
+    <div class="col-md-4 align-self-center">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
+                <label asp-for="Nombre" class="control-label"><b>Nombre</b></label>
                 <input asp-for="Nombre" class="form-control" required/>
                 <span asp-validation-for="Nombre" class="text-danger"></span>
             </div>
             <div><label></label></div>
             <div class="form-group">
-                <label asp-for="PrimerApellido" class="control-label"></label>
+                <label asp-for="PrimerApellido" class="control-label"><b>Primer Apellido</b></label>
                 <input asp-for="PrimerApellido" class="form-control" required/>
                 <span asp-validation-for="PrimerApellido" class="text-danger"></span>
             </div>
             <div><label></label></div>
             <div class="form-group">
-                <label asp-for="SegundoApellido" class="control-label"></label>
+                <label asp-for="SegundoApellido" class="control-label"><b>Segundo Apellido</b></label>
                 <input asp-for="SegundoApellido" class="form-control" />
                 <span asp-validation-for="SegundoApellido" class="text-danger"></span>
             </div>
             <div><label></label></div>
             <div class="form-group">
-                <label asp-for="IdEspecialidad" class="control-label">Especialidad</label>
+                <label asp-for="IdEspecialidad" class="control-label"><b>Especialidad</b></label>
                 <select asp-for="IdEspecialidad" asp-items="@ViewBag.IdEspecialidad" class="form-control"> </select>
                 <span asp-validation-for="IdEspecialidad" class="text-danger"></span>
             </div>
             <div><label></label></div>
             <div class="form-group">
-                <label asp-for="NumCedula" class="control-label">No. de Cédula</label>
+                <label asp-for="NumCedula" class="control-label"><b>No. de Cédula</b></label>
                 <input asp-for="NumCedula" class="form-control" maxlength="18" required/>
                 <span asp-validation-for="NumCedula" class="text-danger"></span>
             </div>
             <div><label></label></div>
             <div class="form-group">
-                <label asp-for="Telefono" class="control-label">Número de Celular</label>
+                <label asp-for="Telefono" class="control-label"><b>Número de Celular</b></label>
                 <input asp-for="Telefono" class="form-control" maxlength="10" pattern="[0-9]{10}" />
                 <span asp-validation-for="Telefono" class="text-danger"></span>
             </div>
@@ -63,7 +69,7 @@
             <div class="form-group">
                 <div class="row d-flex justify-content-end">
                     <div class="col-md-auto">
-                        <a class="link-dark" asp-controller="Medico" asp-action="Details">Regresar</a>
+                        <a class="nav-link text-black" asp-controller="Medico" asp-action="Details">Regresar</a>
                     </div>
                     <div class="col-md-auto">
                         <input type="submit" value="Guardar" class="btn btn-primary" />
@@ -72,6 +78,8 @@
             </div>
         </form>
     </div>
+</div>
+
 </div>
 
         </div> @*Fin Col de _MenuMedicos.cshtml*@
