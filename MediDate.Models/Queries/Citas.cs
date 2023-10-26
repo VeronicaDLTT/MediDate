@@ -133,5 +133,17 @@ namespace MediDate.Models.Queries
                     "sp_citas 11, '', @IdMedico", new { IdMedico });
             }
         }
+
+        public BaseResult Delete(int IdCita)
+        {
+
+            using (var db = GetConnection())
+            {
+                return db.QueryFirstOrDefault<BaseResult>(
+                    "sp_citas 2,@IdCita",
+                    new { IdCita });
+            }
+        }
+
     }
 }

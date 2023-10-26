@@ -537,6 +537,74 @@ namespace MediDate.Controllers
             }
         }
 
+        public IActionResult DeletePaciente(int IdCita)
+        {
+            //Verificamos si hay un Paciente que ha iniciado sesion
+            if (Request.Cookies.TryGetValue("IdPaciente", out string strIdPaciente))
+            {
+                //Buscamos los datos de la Cita
+                var cita = _database.Citas.GetById(IdCita);
+                return View(cita);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeletePacienteConfirmed(int IdCita)
+        {
+            //Eliminamos el servicio
+            var result = _database.Citas.Delete(IdCita);
+
+            if (!result.Success)
+            {
+                TempData["AlertMessage"] = "Error al cancelar la cita. Intente de nuevo. ";
+                return View(IdCita);
+            }
+            else
+            {
+                TempData["SuccessMessage"] = result.Message;
+                return RedirectToAction("IndexPaciente", "Cita");
+            }
+        }
+
+        public IActionResult DeleteMedico(int IdCita)
+        {
+            //Verificamos si hay un Paciente que ha iniciado sesion
+            if (Request.Cookies.TryGetValue("IdMedico", out string strIdPaciente))
+            {
+                //Buscamos los datos de la Cita
+                var cita = _database.Citas.GetById(IdCita);
+                return View(cita);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteMedicoConfirmed(int IdCita)
+        {
+            //Eliminamos el servicio
+            var result = _database.Citas.Delete(IdCita);
+
+            if (!result.Success)
+            {
+                TempData["AlertMessage"] = "Error al cancelar la cita. Intente de nuevo. ";
+                return View(IdCita);
+            }
+            else
+            {
+                TempData["SuccessMessage"] = result.Message;
+                return RedirectToAction("IndexMedico", "Cita");
+            }
+        }
+
         [HttpGet]
         public JsonResult GetDropdownData(string txtBuscar)
         {

@@ -1,0 +1,117 @@
+﻿@model MediDate.Models.Cita
+
+@{
+    ViewData["Title"] = "Cancelar Cita";
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <!--Modal si ocurre una excepción-->
+    <script>
+        window.onload = function () {
+            Swal.fire('Aviso', '@TempData["ErrorMessage"]', 'error');
+        }
+    </script>
+}
+
+@if (TempData["AlertMessage"] != null)
+{
+    <!--Modal si ocurre una excepción-->
+    <script>
+        window.onload = function () {
+            Swal.fire('Aviso', '@TempData["AlertMessage"]', 'info');
+        }
+    </script>
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-auto align-self-center">
+        <h1>Cancelar Cita</h1>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-auto align-self-center">
+
+        <div class="card" style="width: 35rem;">
+            <div class="card-body">
+                <div>
+                    <dl class="row">
+                        <dt class="col-sm-4">
+                            @Html.DisplayName("Especialista")
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.NombreMedico)
+                        </dd>
+                        <dt class="col-sm-4">
+                            @Html.DisplayName("Paciente")
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.NombrePaciente)
+                        </dd>
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Servicio)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.Servicio)
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Fecha)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @{
+                                string fechaFormateada = Model.Fecha.ToString("dd/MM/yyyy");
+                            }
+                            @Html.DisplayFor(modelItem => fechaFormateada)
+                        </dd>
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.Hora)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @{
+                                string horaFormateada = Model.Hora.ToString("hh:mm tt");
+                            }
+                            @Html.DisplayFor(modelItem => horaFormateada)
+                        </dd>
+                    </dl>
+                </div>
+
+                <div class="row justify-content-end">
+                    <div class="col-md-auto">
+                        <a class="nav-link text-black" asp-action="IndexPaciente" asp-controller="Cita">Regresar</a>
+                    </div>
+                    <div class="col-md-auto">
+                        <input type="submit" value="Cancelar" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#eliminarModal" />
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="eliminarModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Cancelar cita</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>¿Desea cancelar la cita definitivamente?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <form asp-action="DeletePacienteConfirmed">
+                    <input asp-for="IdCita" type="hidden" />
+                    <input type="submit" value="Cancelar" class="btn btn-danger" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
